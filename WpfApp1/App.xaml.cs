@@ -13,5 +13,10 @@ namespace WpfApp1
 	/// </summary>
 	public partial class App : Application
 	{
+		private void Application_Startup(object sender, StartupEventArgs e)
+		{ 
+			DDBB.DataBaseSetUp.InitializeDatabase();
+		}
+		
 	}
 }

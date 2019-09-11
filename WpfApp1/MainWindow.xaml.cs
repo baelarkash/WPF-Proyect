@@ -12,27 +12,33 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfApp1.DDBB.Models;
+using WpfApp1.DDBB;
 
 namespace WpfApp1
 {
 	/// <summary>
 	/// Lógica de interacción para MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
+	public partial class MainWindow : NavigationWindow
 	{
 		public MainWindow()
 		{
-			DDBB.DataBaseConnection.InitializeDatabase();
 			InitializeComponent();
 		}
-
-		private void MenuItem_Click_New(object sender, RoutedEventArgs e)
+		public void navigateWindowWindow(object sender, RoutedEventArgs e)
 		{
-			CheckBox.IsChecked = true;
+			//UsersWindow window = new UsersWindow();
+			
+			//window.Show();
+			//this.Close();
 		}
-		private void MenuItem_Click_Delete(object sender, RoutedEventArgs e)
+		public void navigateWindowPage(object sender, RoutedEventArgs e)
 		{
-			CheckBox.IsChecked = false;
+			NavigationWindow window = new NavigationWindow();
+			window.Source = new Uri("Page1.xaml", UriKind.Relative);
+			window.Show();
 		}
+		
 	}
 }
