@@ -14,14 +14,13 @@ namespace WpfApp1.DDBB
 		   : base("name=DatabaseContext")
 		{
 		}
-		
-		public DbSet<Player> Players { get; set; }
+        public DbSet<Player> Players { get; set; }
 		public DbSet<Tournament> Tournaments { get; set; }
 
 		protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
-			modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-		}
+            modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
+        }
 
 	}
 }

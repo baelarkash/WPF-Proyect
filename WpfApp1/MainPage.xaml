@@ -12,6 +12,16 @@
         <ToolBar DockPanel.Dock="Top">
             <local:Menu/>
         </ToolBar>
+        <!--<DataGrid Name="Table">
+            <DataGrid.Columns>
+                <DataGridTemplateColumn Header="Id" Width="30" CellTemplate="{Binding Path=Id}" />
+                <DataGridTemplateColumn Header="Name" Width="150" CellTemplate="{Binding Path=Name}" />
+                <DataGridTemplateColumn Header="CreationDate" Width="150" CellTemplate="{Binding Path=CreationDate}" />
+                <DataGridTemplateColumn Header="StartDate" Width="150" CellTemplate="{Binding Path=StartDate}" />
+                <DataGridTemplateColumn Header="EndDate" Width="150" CellTemplate="{Binding Path=EndDate}" />
+                <DataGridTemplateColumn Header="Player.Name" Width="150" CellTemplate="{Binding Path=Winner.Name}" />
+            </DataGrid.Columns>
+        </DataGrid>-->
         <ListView Margin="10" Name="Table">
             <ListView.View>
                 <GridView>
@@ -20,9 +30,14 @@
                     <GridViewColumn Header="CreationDate" Width="150" DisplayMemberBinding="{Binding CreationDate}" />
                     <GridViewColumn Header="StartDate" Width="150" DisplayMemberBinding="{Binding StartDate}" />
                     <GridViewColumn Header="EndDate" Width="150" DisplayMemberBinding="{Binding EndDate}" />
-                    <GridViewColumn Header="Player.Name" Width="150" DisplayMemberBinding="{Binding Player}" />
+                    <GridViewColumn Header="Name" Width="150" DisplayMemberBinding="{Binding Winner.Name}" />
                 </GridView>
             </ListView.View>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <EventSetter Event="PreviewMouseLeftButtonDown" Handler="ListViewItem_PreviewMouseLeftButtonDown" />
+                </Style>
+            </ListView.ItemContainerStyle>
         </ListView>
 
         </DockPanel>

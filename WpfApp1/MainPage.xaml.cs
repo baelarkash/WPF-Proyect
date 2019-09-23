@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfApp1.DDBB;
+using WpfApp1.DDBB.Models;
 
 namespace WpfApp1
 {
@@ -28,6 +29,17 @@ namespace WpfApp1
 			var items = db.Tournaments.ToList();
 			Table.ItemsSource = items;
 		}
-		
+		private void ListViewItem_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+		{
+			var item = (sender as ListViewItem);
+			if (item != null)
+			{
+				var tournament = item.DataContext as Tournament;
+				NavigationService nav = NavigationService.GetNavigationService(this);
+				TournamentPage page = new TournamentPage(tournament.Id);
+				nav.Navigate(page);
+			}
+		}
+
 	}
 }
