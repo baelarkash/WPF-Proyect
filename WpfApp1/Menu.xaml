@@ -17,5 +17,6 @@
             <Separator />
             <MenuItem Header="_Exit" />
         </MenuItem>
+		
     </Menu>
 </UserControl>
