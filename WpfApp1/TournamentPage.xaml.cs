@@ -30,7 +30,7 @@ namespace WpfApp1
 			string parameter = string.Empty;			
 			var db = new DDBB.DDBBContext();
 			var model = db.Tournaments.Find(id);
-			TournamentId.Text = id.ToString();
+            //Tournament = model;
         }
 
 	}

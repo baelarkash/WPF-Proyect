@@ -9,7 +9,6 @@
     <Menu IsMainMenu="True">
         <MenuItem Header="Home" Click="Navigate_MainPage"></MenuItem>
         <MenuItem Header="Users" Click="Navigate_UserPage"></MenuItem>
-
         <MenuItem Header="Example">
             <MenuItem Header="_New"/>
             <MenuItem Header="_Delete"/>
