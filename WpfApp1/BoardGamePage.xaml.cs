@@ -28,6 +28,7 @@ namespace WpfApp1
             this.DataContext = new BoardGame();
             var items = db.BoardGames.ToList();
             Table.ItemsSource = items;
+
         }
 		public BoardGamePage(int id):this()
         {
