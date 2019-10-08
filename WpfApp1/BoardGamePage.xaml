@@ -4,10 +4,10 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfApp1"
-      xmlns:Models="clr-namespace:WpfApp1.DDBB.Models" x:Class="WpfApp1.TournamentPage"
+      xmlns:Models="clr-namespace:WpfApp1.DDBB.Models" x:Class="WpfApp1.BoardGamePage"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="TournamentPage" >
+      Title="BoardGamePage" >
     <DockPanel>
         <ToolBar DockPanel.Dock="Top">
             <local:Menu/>
@@ -34,23 +34,27 @@
                 </Grid.RowDefinitions>
 
                 <Button Grid.Column="0" Grid.Row="0" Click="New">Nuevo</Button>
-               
-            
-                <StackPanel Grid.Column="0" Grid.Row="1">
+            <StackPanel Grid.Column="0" Grid.Row="1">
                 
                 <Label Content="Nombre" />
                 <TextBox TabIndex="0" Text="{Binding Path=Name}"></TextBox>
-            </StackPanel>
+                    <Label Content="Duración"/>
+                    <TextBox TabIndex="0" Text="{Binding Path=Duration}"></TextBox>
+                </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="1">
-                <Label Content="Fecha Inicio" TabIndex="1"/>
-                <DatePicker SelectedDate="{Binding Path=StartDate}">
-                </DatePicker>
-            </StackPanel>
+                <Label Content="Mínimo Jugadores" TabIndex="1"/>
+                    <TextBox TabIndex="0" Text="{Binding Path=MinPlayers}"></TextBox>
+                    <Label Content="Peso" TabIndex="1"/>
+                    <TextBox TabIndex="0" Text="{Binding Path=Weight}"></TextBox>
+                </StackPanel>
                 <StackPanel Grid.Column="4" Grid.Row="1">
-                <Label Content="Fecha Fin" TabIndex="2"/>
-                <DatePicker SelectedDate="{Binding Path=EndDate}">
-                </DatePicker>
-            </StackPanel>
+                    <Label Content="Máximo Jugadores" TabIndex="2"/>
+                    <TextBox TabIndex="0" Text="{Binding Path=MaxPlayers}"></TextBox>
+                    <Label Content="Puntuación" TabIndex="2"/>
+                    <TextBox TabIndex="0" Text="{Binding Path=Score}"></TextBox>
+                    <!--<Label Content="Fecha Fin" TabIndex="2"/>
+                    <TextBox TabIndex="0" Text="{Binding Path=Owner.Name}"></TextBox>-->
+                </StackPanel>
                 <StackPanel Grid.Column="6" Grid.Row="2">
                     <Button Click="CreateOrUpdate">Guardar</Button>
                 </StackPanel>
@@ -62,9 +66,12 @@
                     <GridViewColumn Header="Id" Width="30" DisplayMemberBinding="{Binding Id}" />
                     <GridViewColumn Header="Nombre" Width="150" DisplayMemberBinding="{Binding Name}" />
                     <GridViewColumn Header="Creacion" Width="150" DisplayMemberBinding="{Binding CreationDate}" />
-                    <GridViewColumn Header="Fecha inicio" Width="150" DisplayMemberBinding="{Binding StartDate,StringFormat=d}" />
-                    <GridViewColumn Header="Fecha fin" Width="150" DisplayMemberBinding="{Binding EndDate, StringFormat=d}" />
-                        <GridViewColumn Header="Ganador" Width="150" DisplayMemberBinding="{Binding Winner.Name}" />
+                    <GridViewColumn Header="Mínimo Jugadores" Width="150" DisplayMemberBinding="{Binding MinPlayers}" />
+                        <GridViewColumn Header="Mánimo Jugadores" Width="150" DisplayMemberBinding="{Binding MaxPlayers}" />
+                        <GridViewColumn Header="Duración" Width="150" DisplayMemberBinding="{Binding Duration}" />
+                        <GridViewColumn Header="Peso" Width="150" DisplayMemberBinding="{Binding Weight}" />
+                        <GridViewColumn Header="Puntuación" Width="150" DisplayMemberBinding="{Binding Score}" />
+                        <GridViewColumn Header="Poseedor" Width="150" DisplayMemberBinding="{Binding Owner.Name}" />
                     </GridView>
             </ListView.View>
             <ListView.ItemContainerStyle>

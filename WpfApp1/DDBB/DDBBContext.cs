@@ -16,8 +16,10 @@ namespace WpfApp1.DDBB
 		}
         public DbSet<Player> Players { get; set; }
 		public DbSet<Tournament> Tournaments { get; set; }
+        public DbSet<BoardGame> BoardGames { get; set; }
 
-		protected override void OnModelCreating(DbModelBuilder modelBuilder)
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }

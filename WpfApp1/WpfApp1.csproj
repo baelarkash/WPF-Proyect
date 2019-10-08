@@ -73,20 +73,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="DDBB\Models\BoardGame.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Menu.xaml.cs">
       <DependentUpon>Menu.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PlayerDetailedInfo.xaml.cs">
-      <DependentUpon>PlayerDetailedInfo.xaml</DependentUpon>
+    <Compile Include="BoardGamePage.xaml.cs">
+      <DependentUpon>BoardGamePage.xaml</DependentUpon>
     </Compile>
     <Compile Include="TournamentPage.xaml.cs">
       <DependentUpon>TournamentPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UsersPage.xaml.cs">
-      <DependentUpon>UsersPage.xaml</DependentUpon>
+    <Compile Include="UserPage.xaml.cs">
+      <DependentUpon>UserPage.xaml</DependentUpon>
     </Compile>
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
@@ -112,15 +113,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PlayerDetailedInfo.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="BoardGamePage.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="TournamentPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UsersPage.xaml">
+    <Page Include="UserPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

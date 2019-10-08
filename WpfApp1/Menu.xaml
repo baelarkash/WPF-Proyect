@@ -5,10 +5,12 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfApp1"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" >
+             d:DesignHeight="450" d:DesignWidth="800" Height="20">
     <Menu IsMainMenu="True">
-        <MenuItem Header="Home" Click="Navigate_MainPage"></MenuItem>
-        <MenuItem Header="Users" Click="Navigate_UserPage"></MenuItem>
+        <MenuItem Header="Home" Click="MainPage"></MenuItem>
+        <MenuItem Header="Jugadores" Click="UserPage"></MenuItem>
+        <MenuItem Header="Torneos" Click="TournamentPage"></MenuItem>
+        <MenuItem Header="Juegos" Click="BoardGamePage"></MenuItem>
         <MenuItem Header="Example">
             <MenuItem Header="_New"/>
             <MenuItem Header="_Delete"/>

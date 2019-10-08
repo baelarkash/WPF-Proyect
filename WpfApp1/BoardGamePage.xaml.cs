@@ -19,36 +19,36 @@ namespace WpfApp1
     /// <summary>
     /// Lógica de interacción para TournamentPage.xaml
     /// </summary>
-    public partial class TournamentPage : Page
+    public partial class BoardGamePage : Page
     {
         DDBB.DDBBContext db = new DDBB.DDBBContext();
-        public TournamentPage()
+        public BoardGamePage()
 		{
 			InitializeComponent();
-            this.DataContext = new Tournament();
-            var items = db.Tournaments.ToList();
+            this.DataContext = new BoardGame();
+            var items = db.BoardGames.ToList();
             Table.ItemsSource = items;
         }
-		public TournamentPage(int id):this()
+		public BoardGamePage(int id):this()
         {
             InitializeComponent();
 			string parameter = string.Empty;						
-			var model = db.Tournaments.Find(id);
+			var model = db.BoardGames.Find(id);
             this.DataContext = model;
-            var items = db.Tournaments.ToList();
+            var items = db.BoardGames.ToList();
             Table.ItemsSource = items;
 
         }
         public void CreateOrUpdate(object sender, RoutedEventArgs e)
         {
-            Tournament item =(Tournament) this.DataContext;
+            BoardGame item =(BoardGame) this.DataContext;
             if(item.Id == 0)
             {
-                db.Tournaments.Add(item);
+                db.BoardGames.Add(item);
                 item.CreationDate = DateTime.Now;
             }           
             db.SaveChanges();
-            var items = db.Tournaments.ToList();
+            var items = db.BoardGames.ToList();
             Table.ItemsSource = items;
         }
         private void Edit(object sender, MouseButtonEventArgs e)
@@ -56,13 +56,13 @@ namespace WpfApp1
             var item = (sender as ListViewItem);
             if (item != null)
             {
-                var tournament = item.DataContext as Tournament;
-                this.DataContext = db.Tournaments.Find(tournament.Id);
+                var boardGame = item.DataContext as BoardGame;
+                this.DataContext = db.BoardGames.Find(boardGame.Id);
             }
         }
         private void New(object sender, RoutedEventArgs e)
         {
-            this.DataContext = new Tournament();
+            this.DataContext = new BoardGame();
         }
     }
 }

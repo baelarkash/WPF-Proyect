@@ -40,6 +40,7 @@ namespace WpfApp1
 				nav.Navigate(page);
 			}
 		}
+        //https://github.com/Live-Charts/Live-Charts
 
-	}
+    }
 }

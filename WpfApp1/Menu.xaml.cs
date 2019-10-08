@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,16 +25,32 @@ namespace WpfApp1
 		{
 			InitializeComponent();
 		}
-		public void Navigate_UserPage(object sender, RoutedEventArgs e)
+		public void UserPage(object sender, RoutedEventArgs e)
 		{
-			NavigationService nav = NavigationService.GetNavigationService(this);
-			nav.Navigate(new Uri("UsersPage.xaml", UriKind.RelativeOrAbsolute));
+            var currentMethodName = new StackTrace().GetFrame(0).GetMethod().Name;
+            this.Base_Navigate(currentMethodName + ".xaml");			
 		}
-		public void Navigate_MainPage(object sender, RoutedEventArgs e)
+		public void MainPage(object sender, RoutedEventArgs e)
 		{
-			NavigationService nav = NavigationService.GetNavigationService(this);
-			nav.Navigate(new Uri("MainPage.xaml", UriKind.RelativeOrAbsolute));
+            var currentMethodName = new StackTrace().GetFrame(0).GetMethod().Name;
+            this.Base_Navigate(currentMethodName+".xaml");
 		}
+        public void TournamentPage(object sender, RoutedEventArgs e)
+        {
+            var currentMethodName = new StackTrace().GetFrame(0).GetMethod().Name;
+            this.Base_Navigate(currentMethodName + ".xaml");
+        }
+        public void BoardGamePage(object sender, RoutedEventArgs e)
+        {
+            var currentMethodName = new StackTrace().GetFrame(0).GetMethod().Name;
+            this.Base_Navigate(currentMethodName + ".xaml");
+        }
+
+        private void Base_Navigate(string uri)
+        {
+            NavigationService nav = NavigationService.GetNavigationService(this);
+            nav.Navigate(new Uri(uri, UriKind.RelativeOrAbsolute));
+        }
 		
 	}
 }

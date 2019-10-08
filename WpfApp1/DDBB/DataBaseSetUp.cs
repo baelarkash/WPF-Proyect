@@ -55,7 +55,8 @@ namespace WpfApp1.DDBB
 					"MaxPlayers int NULL," +
 					"Duration decimal NULL,"+
 					"Score decimal NULL,"+
-					"OwnerId int NULL," +
+                    "Weight decimal NULL," +
+                    "OwnerId int NULL," +
 					"FOREIGN KEY (OwnerId) REFERENCES Player(Id))";
 
 				createTable = new SQLiteCommand(tableCommand, db);
