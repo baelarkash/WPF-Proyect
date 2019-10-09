@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfApp1.DDBB;
+using WpfApp1.DDBB.Models;
 
 namespace WpfApp1
 {
@@ -21,12 +22,47 @@ namespace WpfApp1
 	/// </summary>
 	public partial class UsersPage : Page
 	{
-		public UsersPage()
+        DDBBContext db = new DDBBContext();
+        public UsersPage()
 		{
 			InitializeComponent();
-			var db = new DDBBContext();
-			var items = db.Players.ToList();
+            this.DataContext = new Player();
+            var items = db.Players.ToList();
 			Table.ItemsSource = items;
 		}
-	}
+        public UsersPage(int id)
+        {
+            InitializeComponent();
+            this.DataContext = db.Players.Find(id);
+            var items = db.Players.ToList();
+            Table.ItemsSource = items;
+        }
+        private void Edit(object sender, MouseButtonEventArgs e)
+        {
+            var item = (sender as ListViewItem);
+            if (item != null)
+            {
+                var Player = item.DataContext as Player;
+                var dataItem = db.Players.Find(Player.Id);
+                this.DataContext = dataItem;
+            }
+        }
+        public void CreateOrUpdate(object sender, RoutedEventArgs e)
+        {
+            Player item = (Player)this.DataContext;
+            if (item.Id == 0)
+            {
+                db.Players.Add(item);
+                item.CreationDate = DateTime.Now;
+            }
+            db.SaveChanges();
+            var items = db.Players.ToList();
+            Table.ItemsSource = items;
+            this.DataContext = new Player();
+        }
+        private void New(object sender, RoutedEventArgs e)
+        {
+            this.DataContext = new Player();
+        }
+    }
 }

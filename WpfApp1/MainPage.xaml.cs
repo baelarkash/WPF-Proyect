@@ -36,7 +36,7 @@ namespace WpfApp1
 			{
 				var tournament = item.DataContext as Tournament;
 				NavigationService nav = NavigationService.GetNavigationService(this);
-				TournamentPage page = new TournamentPage(tournament.Id);
+                TournamentInfoPage page = new TournamentInfoPage(tournament.Id);
 				nav.Navigate(page);
 			}
 		}

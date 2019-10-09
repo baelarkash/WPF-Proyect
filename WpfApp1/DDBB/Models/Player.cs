@@ -10,13 +10,15 @@ namespace WpfApp1.DDBB.Models
 	[Table("Player")]
 	public class Player
 	{
-		public Player()
-		{
-			this.Tournaments = new HashSet<Tournament>();
-		}
+		//public Player()
+		//{
+		//	this.Tournaments = new HashSet<Tournament>();
+		//}
 		public int Id { get; set; }
 		public string Name { get; set; }
+        public DateTime? CreationDate { get; set; }
 
-		public virtual ICollection<Tournament> Tournaments { get; set; }
+
+        public virtual ICollection<Tournament> Tournaments { get; set; }
 	}
 }

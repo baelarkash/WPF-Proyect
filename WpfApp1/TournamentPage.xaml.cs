@@ -50,6 +50,7 @@ namespace WpfApp1
             db.SaveChanges();
             var items = db.Tournaments.ToList();
             Table.ItemsSource = items;
+            this.DataContext = new Tournament();
         }
         private void Edit(object sender, MouseButtonEventArgs e)
         {

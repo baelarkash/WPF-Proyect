@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -28,6 +29,7 @@ namespace WpfApp1
             this.DataContext = new BoardGame();
             var items = db.BoardGames.ToList();
             Table.ItemsSource = items;
+            this.cmbPlayers.ItemsSource = db.Players.ToList();
 
         }
 		public BoardGamePage(int id):this()
@@ -47,10 +49,12 @@ namespace WpfApp1
             {
                 db.BoardGames.Add(item);
                 item.CreationDate = DateTime.Now;
-            }           
+            }
+            item.OwnerId = ((Player)cmbPlayers.SelectedItem).Id;
             db.SaveChanges();
             var items = db.BoardGames.ToList();
             Table.ItemsSource = items;
+            this.DataContext = new BoardGame();
         }
         private void Edit(object sender, MouseButtonEventArgs e)
         {
@@ -58,12 +62,19 @@ namespace WpfApp1
             if (item != null)
             {
                 var boardGame = item.DataContext as BoardGame;
-                this.DataContext = db.BoardGames.Find(boardGame.Id);
+                var dataItem = db.BoardGames.Find(boardGame.Id);
+                this.DataContext = dataItem;
+                cmbPlayers.SelectedValue = dataItem.Owner;
             }
         }
         private void New(object sender, RoutedEventArgs e)
         {
             this.DataContext = new BoardGame();
+        }
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
         }
     }
 }

@@ -26,7 +26,8 @@ namespace WpfApp1.DDBB
 				//PLAYER
 				String tableCommand = "CREATE TABLE IF NOT " +
 					"EXISTS Player (Id INTEGER PRIMARY KEY AUTOINCREMENT NOT null, " +
-					"Name NVARCHAR(50) NOT NULL)";
+                    "CreationDate DATETIME NULL, "+
+                    "Name NVARCHAR(50) NOT NULL)";
 
 				SQLiteCommand createTable = new SQLiteCommand(tableCommand, db);
 

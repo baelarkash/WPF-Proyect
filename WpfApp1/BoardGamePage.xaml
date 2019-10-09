@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfApp1"
       xmlns:Models="clr-namespace:WpfApp1.DDBB.Models" x:Class="WpfApp1.BoardGamePage"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity;assembly=System.Windows.Interactivity"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
       Title="BoardGamePage" >
@@ -13,9 +14,7 @@
             <local:Menu/>
         </ToolBar>
         <StackPanel>
-            
-
-        <Grid Margin="20">
+            <Grid Margin="20">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="20"/>
@@ -39,21 +38,36 @@
                 <Label Content="Nombre" />
                 <TextBox TabIndex="0" Text="{Binding Path=Name}"></TextBox>
                     <Label Content="Duración"/>
-                    <TextBox TabIndex="0" Text="{Binding Path=Duration}"></TextBox>
+                    <TextBox TabIndex="4" Text="{Binding Path=Duration}"></TextBox>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="1">
-                <Label Content="Mínimo Jugadores" TabIndex="1"/>
-                    <TextBox TabIndex="0" Text="{Binding Path=MinPlayers}"></TextBox>
-                    <Label Content="Peso" TabIndex="1"/>
-                    <TextBox TabIndex="0" Text="{Binding Path=Weight}"></TextBox>
+
+                <Label Content="Mínimo Jugadores"/>
+                    <TextBox TabIndex="1" Text="{Binding Path=MinPlayers}" PreviewTextInput="NumberValidationTextBox">
+                        <!--<i:Interaction.Behaviors>
+                            <local:TextBoxInputRegExBehaviour RegularExpression="^\d+$" MaxLength="9" EmptyValue="0" />
+                        </i:Interaction.Behaviors>-->
+                    </TextBox>
+                    <Label Content="Peso"/>
+                    <TextBox TabIndex="5" Text="{Binding Path=Weight}"></TextBox>
                 </StackPanel>
                 <StackPanel Grid.Column="4" Grid.Row="1">
-                    <Label Content="Máximo Jugadores" TabIndex="2"/>
-                    <TextBox TabIndex="0" Text="{Binding Path=MaxPlayers}"></TextBox>
-                    <Label Content="Puntuación" TabIndex="2"/>
-                    <TextBox TabIndex="0" Text="{Binding Path=Score}"></TextBox>
+                    <Label Content="Máximo Jugadores" PreviewTextInput="NumberValidationTextBox"/>
+                    <TextBox TabIndex="2" Text="{Binding Path=MaxPlayers}"></TextBox>
+                    <Label Content="Puntuación"/>
+                    <TextBox TabIndex="6" Text="{Binding Path=Score}"></TextBox>
                     <!--<Label Content="Fecha Fin" TabIndex="2"/>
                     <TextBox TabIndex="0" Text="{Binding Path=Owner.Name}"></TextBox>-->
+                </StackPanel>
+                <StackPanel Grid.Column="6" Grid.Row="1">
+                    <Label Content="Propietario"/>
+                    <ComboBox Name="cmbPlayers" SelectedItem="{Binding Path=OwnerId}" TabIndex="3">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
                 </StackPanel>
                 <StackPanel Grid.Column="6" Grid.Row="2">
                     <Button Click="CreateOrUpdate">Guardar</Button>
@@ -65,13 +79,13 @@
                 <GridView>
                     <GridViewColumn Header="Id" Width="30" DisplayMemberBinding="{Binding Id}" />
                     <GridViewColumn Header="Nombre" Width="150" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Header="Creacion" Width="150" DisplayMemberBinding="{Binding CreationDate}" />
+                    <GridViewColumn Header="Fecha creación" Width="150" DisplayMemberBinding="{Binding CreationDate}" />
                     <GridViewColumn Header="Mínimo Jugadores" Width="150" DisplayMemberBinding="{Binding MinPlayers}" />
                         <GridViewColumn Header="Mánimo Jugadores" Width="150" DisplayMemberBinding="{Binding MaxPlayers}" />
                         <GridViewColumn Header="Duración" Width="150" DisplayMemberBinding="{Binding Duration}" />
                         <GridViewColumn Header="Peso" Width="150" DisplayMemberBinding="{Binding Weight}" />
                         <GridViewColumn Header="Puntuación" Width="150" DisplayMemberBinding="{Binding Score}" />
-                        <GridViewColumn Header="Poseedor" Width="150" DisplayMemberBinding="{Binding Owner.Name}" />
+                        <GridViewColumn Header="Propietario" Width="150" DisplayMemberBinding="{Binding Owner.Name}" />
                     </GridView>
             </ListView.View>
             <ListView.ItemContainerStyle>
