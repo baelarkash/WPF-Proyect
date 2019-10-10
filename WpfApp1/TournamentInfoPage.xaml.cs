@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AutoMapper;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -66,6 +67,7 @@ namespace WpfApp1
                 string[] time = Hour.Text.Split(':');
                 item.StartTime = item.StartTime.Value.AddHours(int.Parse(time[0]));
                 item.StartTime = item.StartTime.Value.AddMinutes(int.Parse(time[1]));
+                
 
                 db.SaveChanges();
             }
@@ -112,20 +114,37 @@ namespace WpfApp1
         }
         private void LoadTable(int idTournament)
         {
+            var config = new MapperConfiguration(cfg => {
+                cfg.CreateMap<TournamentGame, ViewModels.TournamentGameTable>();
+            });
+
+            IMapper iMapper = config.CreateMapper();
+
             var items = db.TournamentGames.Where(x => x.TournamentId == idTournament).ToList();
-            Table.ItemsSource = items;
+            var model = new List<ViewModels.TournamentGameTable>();
+            foreach(var item in items)
+            {
+                var aux = iMapper.Map<TournamentGame, ViewModels.TournamentGameTable>(item);
+                aux.WinnerName = getWinner(item);
+                model.Add(aux);
+            }                        
+            Table.ItemsSource = model;
         }
         private void Edit(object sender, MouseButtonEventArgs e)
         {
             var item = (sender as ListViewItem);
             if (item != null)
             {
-                var TournamentGame = item.DataContext as TournamentGame;
+                var TournamentGame = item.DataContext as ViewModels.TournamentGameTable;
                 var dataItem = db.TournamentGames.Find(TournamentGame.Id);
                 this.DataContext = dataItem;
                 cmbBoardGames.SelectedValue = dataItem.BoardGame;
                 cmbTournaments.SelectedValue = dataItem.Tournament;
                 GamePlayers.Visibility = Visibility.Visible;
+                var tournamentGamePlayer = new TournamentGamePlayer();
+                tournamentGamePlayer.TournamentGameId = TournamentGame.Id;
+                GamePlayers.DataContext = tournamentGamePlayer;
+                cmbPlayers.SelectedItem = null;
                 lstPlayers.ItemsSource = dataItem.TournamentGamePlayers.ToList();
             }
 
@@ -140,22 +159,26 @@ namespace WpfApp1
             try
             {
                 TournamentGame tournamentGame = (TournamentGame)this.DataContext;
-                if (tournamentGame.Id != 0)
+                int playerId = ((Player)cmbPlayers.SelectedItem).Id;
+                bool alreadyInGame = tournamentGame.TournamentGamePlayers.Any(x => x.PlayerId == playerId);
+                if (tournamentGame.Id != 0 && !alreadyInGame)
                 {
-                    var item = new TournamentGamePlayer();
-                    item.Score = int.Parse(Score.Text);
-                    item.PlayerId = ((Player)cmbPlayers.SelectedItem).Id;
-                    item.TournamentGameId = tournamentGame.Id;
-                    db.TournamentGamePlayers.Add(item);
+                    TournamentGamePlayer gameplayer =(TournamentGamePlayer) GamePlayers.DataContext;
+                    gameplayer.PlayerId = playerId;
+                    db.TournamentGamePlayers.Add(gameplayer);
                     db.SaveChanges();
-                    Score.Text = "";
                     cmbPlayers.SelectedItem = null;
+                    GamePlayers.DataContext = new TournamentGamePlayer();
                     lstPlayers.ItemsSource = db.TournamentGamePlayers.Where(x => x.TournamentGameId == tournamentGame.Id).ToList();
                 }
+                
             }
             catch (Exception ex) { }
         }
-
+        private string getWinner(TournamentGame tg)
+        {
+            return tg.TournamentGamePlayers.Count>0? tg.TournamentGamePlayers.OrderByDescending(x => x.Score).First().Player.Name:"";
+        }
         //private void loadPlayers(int number)
         //{
 
