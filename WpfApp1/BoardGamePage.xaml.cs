@@ -44,14 +44,17 @@ namespace WpfApp1
         }
         public void CreateOrUpdate(object sender, RoutedEventArgs e)
         {
-            BoardGame item =(BoardGame) this.DataContext;
-            if(item.Id == 0)
-            {
-                db.BoardGames.Add(item);
-                item.CreationDate = DateTime.Now;
-            }
-            item.OwnerId = ((Player)cmbPlayers.SelectedItem).Id;
-            db.SaveChanges();
+            try
+            {            
+                BoardGame item =(BoardGame) this.DataContext;
+                if(item.Id == 0)
+                {
+                    db.BoardGames.Add(item);
+                    item.CreationDate = DateTime.Now;
+                }
+                item.OwnerId = ((Player)cmbPlayers.SelectedItem).Id;
+                db.SaveChanges();
+            }catch(Exception ex) { }
             var items = db.BoardGames.ToList();
             Table.ItemsSource = items;
             this.DataContext = new BoardGame();

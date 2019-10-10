@@ -13,6 +13,7 @@
             <local:Menu/>
         </ToolBar>
         <StackPanel>
+            
             <Grid Margin="20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -50,6 +51,7 @@
                 </StackPanel>
 
             </Grid>
+            <TextBlock HorizontalAlignment="Center" FontSize="25">Listado de jugadores</TextBlock>
             <ListView Margin="10" Name="Table">
                 <ListView.View>
                     <GridView>

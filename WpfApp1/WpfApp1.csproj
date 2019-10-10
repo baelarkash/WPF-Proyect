@@ -83,6 +83,7 @@
     <Compile Include="Behaviours\TextBoxInputRegExBehaviour.cs" />
     <Compile Include="DDBB\Models\BoardGame.cs" />
     <Compile Include="DDBB\Models\TournamentGame.cs" />
+    <Compile Include="DDBB\Models\TournamentGamePlayer.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>

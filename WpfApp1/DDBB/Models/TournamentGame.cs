@@ -15,7 +15,12 @@ namespace WpfApp1.DDBB.Models
         public int BoardGameId { get; set; }
         public bool Finished { get; set; }
 
+
         public Tournament Tournament { get; set; }
         public BoardGame BoardGame { get; set; }
+
+
+
+        public virtual ICollection<TournamentGamePlayer> TournamentGamePlayers { get; set; }
     }
 }

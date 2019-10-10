@@ -83,8 +83,10 @@ namespace WpfApp1.DDBB
 				tableCommand = "CREATE TABLE IF NOT " +
 					"EXISTS TournamentGamePlayer (Id INTEGER PRIMARY KEY AUTOINCREMENT NOT null, " +
 					"PlayerId int not null, " +
-					"Score decimal NULL, " +					
-					"FOREIGN KEY (PlayerId) REFERENCES Player(Id))";
+					"Score decimal NULL, " +
+                    "TournamentGameId int not null, " +
+                    "FOREIGN KEY (TournamentGameId) REFERENCES Tournament(Id)," +
+                    "FOREIGN KEY (PlayerId) REFERENCES Player(Id))";
 
 				createTable = new SQLiteCommand(tableCommand, db);
 

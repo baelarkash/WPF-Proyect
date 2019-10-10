@@ -41,13 +41,16 @@ namespace WpfApp1
         }
         public void CreateOrUpdate(object sender, RoutedEventArgs e)
         {
-            Tournament item =(Tournament) this.DataContext;
-            if(item.Id == 0)
-            {
-                db.Tournaments.Add(item);
-                item.CreationDate = DateTime.Now;
-            }           
-            db.SaveChanges();
+            try
+            {            
+                Tournament item =(Tournament) this.DataContext;
+                if(item.Id == 0)
+                {
+                    db.Tournaments.Add(item);
+                    item.CreationDate = DateTime.Now;
+                }           
+                db.SaveChanges();
+            }catch(Exception ex) { }
             var items = db.Tournaments.ToList();
             Table.ItemsSource = items;
             this.DataContext = new Tournament();
