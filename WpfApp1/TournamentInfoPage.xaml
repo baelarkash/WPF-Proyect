@@ -45,7 +45,7 @@
                     <DatePicker TabIndex="0" Name="StartTime" SelectedDate="{Binding Path=StartTime}">
                     </DatePicker>
                     <Label Content="Finalizado"/>
-                    <CheckBox TabIndex="4" Name="Finished"></CheckBox>
+                    <CheckBox TabIndex="4" Name="Finished" IsChecked="{Binding Finished}"></CheckBox>
                 </StackPanel>
                 <StackPanel Grid.Column="2" Grid.Row="1">
                     <Label Content="Hora"/>
@@ -105,10 +105,10 @@
 
                 <StackPanel Grid.Column="2">
                     <Label>Puntuación</Label>
-                    <TextBox Name="Score" Text="{Binding Score}"></TextBox>
+                    <TextBox Name="Score" Text="{Binding Score}" PreviewTextInput="NumberValidationTextBox"></TextBox>
                 </StackPanel>
                 <StackPanel Grid.Column="4">
-                    <Button Click="AñadirJugador">Añadir</Button>
+                    <Button Click="CreateOrUpdatePlayer">Guardar</Button>
                 </StackPanel>
                 <StackPanel Grid.Column="6">
                     <Grid Margin="20">
@@ -132,8 +132,8 @@
                         </ListBox>
                         <StackPanel Grid.Column="2">
                             <Button>Añadir</Button>
-                            <Button>Eliminar</Button>
-                            <Button>Editar</Button>
+                            <Button Click="DeletePlayer">Eliminar</Button>
+                            <Button Click="EditPlayer">Editar</Button>
                         </StackPanel>
                     </Grid>
                 </StackPanel>

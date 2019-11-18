@@ -12,6 +12,7 @@ namespace WpfApp1.DDBB.Models
         public int PlayerId { get; set; }
         public decimal? Score { get; set; }
         public int? TournamentGameId { get; set; }
+        public int? Position { get; set; }
 
         public TournamentGame TournamentGame { get; set; }
         public Player Player { get; set; }

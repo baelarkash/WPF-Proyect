@@ -23,8 +23,11 @@ namespace WpfApp1
     /// </summary>
     public partial class TournamentInfoPage : Page
     {
+        #region "Properties"
         DDBB.DDBBContext db = new DDBB.DDBBContext();
         int SelectedTournamentId;
+        #endregion
+        #region "Builders"
         public TournamentInfoPage()
         {
             InitializeComponent();
@@ -51,6 +54,8 @@ namespace WpfApp1
 
             SelectedTournamentId = tournamentId;
         }
+        #endregion
+        #region "CRUD"
         public void CreateOrUpdate(object sender, RoutedEventArgs e)
         {
             try
@@ -67,7 +72,15 @@ namespace WpfApp1
                 string[] time = Hour.Text.Split(':');
                 item.StartTime = item.StartTime.Value.AddHours(int.Parse(time[0]));
                 item.StartTime = item.StartTime.Value.AddMinutes(int.Parse(time[1]));
-                
+                if (item.Finished) {
+                    if (item.TournamentGamePlayers?.Count() > 0)
+                    {
+                        foreach( var player in item.TournamentGamePlayers.OrderBy(x=>x.Score).Select((value, i) => new { i, value }))
+                        {
+                            player.value.Position = player.i + 1;
+                        }
+                    }
+                }
 
                 db.SaveChanges();
             }
@@ -76,7 +89,81 @@ namespace WpfApp1
             RefreshData();
 
         }
+        private void Edit(object sender, MouseButtonEventArgs e)
+        {
+            var item = (sender as ListViewItem);
+            if (item != null)
+            {
+                var TournamentGame = item.DataContext as ViewModels.TournamentGameTable;
+                var dataItem = db.TournamentGames.Find(TournamentGame.Id);
+                this.DataContext = dataItem;
+                cmbBoardGames.SelectedValue = dataItem.BoardGame;
+                cmbTournaments.SelectedValue = dataItem.Tournament;
+                GamePlayers.Visibility = Visibility.Visible;
+                var tournamentGamePlayer = new TournamentGamePlayer();
+                tournamentGamePlayer.TournamentGameId = TournamentGame.Id;
+                GamePlayers.DataContext = tournamentGamePlayer;
+                cmbPlayers.SelectedItem = null;
+                lstPlayers.ItemsSource = dataItem.TournamentGamePlayers.ToList();
+            }
+        }
+        private void CreateOrUpdatePlayer(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                TournamentGame tournamentGame = (TournamentGame)this.DataContext;
+                var item = GamePlayers.DataContext as TournamentGamePlayer;               
+                if (item.Id != 0)
+                {
+                    db.SaveChanges();
+                    NewPlayer(tournamentGame.Id);
+                    LoadTable(tournamentGame.Tournament.Id);
+                }
+                else
+                {
+                    
+                    int playerId = ((Player)cmbPlayers.SelectedItem).Id;
+                    bool alreadyInGame = tournamentGame.TournamentGamePlayers.Any(x => x.PlayerId == playerId);
 
+                    if (tournamentGame.Id != 0 && !alreadyInGame)
+                    {
+                        TournamentGamePlayer gameplayer = (TournamentGamePlayer)GamePlayers.DataContext;
+                        gameplayer.PlayerId = playerId;
+                        db.TournamentGamePlayers.Add(gameplayer);
+                        db.SaveChanges();
+                        NewPlayer(tournamentGame.Id);
+                        LoadTable(tournamentGame.Tournament.Id);
+                    }
+                }
+            }
+            catch (Exception ex) { }
+        }
+        private void EditPlayer(object sender, RoutedEventArgs e)
+        {
+
+
+            var TournamentGamePlayer = lstPlayers.SelectedItem as TournamentGamePlayer;
+            GamePlayers.DataContext = TournamentGamePlayer;
+            var game = db.TournamentGamePlayers.Find(TournamentGamePlayer.Id);
+            cmbPlayers.SelectedValue = game.Player;
+            Score.Text = game.Score.HasValue ? game.Score.Value.ToString() : "";
+
+        }
+        private void DeletePlayer(object sender, RoutedEventArgs e)
+        {
+
+            var TournamentGamePlayer = lstPlayers.SelectedItem as TournamentGamePlayer;
+            var idTournamentGame = TournamentGamePlayer.TournamentGameId.Value;
+            var idTournament = TournamentGamePlayer.TournamentGame.TournamentId;
+            db.TournamentGamePlayers.Remove(TournamentGamePlayer);
+            db.SaveChanges();
+
+            NewPlayer(idTournamentGame);
+            LoadTable(idTournament);
+
+        }
+        #endregion
+        #region "Validations"
         private void TimeValidationTextBox(object sender, TextCompositionEventArgs e)
         {
             //Regex regex = new Regex("^(0[0-9]|1[0-9]|2[0-3]|[0-9]):[0-5][0-9]$");
@@ -94,6 +181,14 @@ namespace WpfApp1
 
             }
         }
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            
+            Regex regex = new Regex("^([0-9]*)$");            
+            e.Handled = !regex.IsMatch(e.Text);
+
+        }
+        #endregion
         #region "LoadData"
         private void RefreshData()
         {
@@ -130,88 +225,29 @@ namespace WpfApp1
             }                        
             Table.ItemsSource = model;
         }
-        private void Edit(object sender, MouseButtonEventArgs e)
-        {
-            var item = (sender as ListViewItem);
-            if (item != null)
-            {
-                var TournamentGame = item.DataContext as ViewModels.TournamentGameTable;
-                var dataItem = db.TournamentGames.Find(TournamentGame.Id);
-                this.DataContext = dataItem;
-                cmbBoardGames.SelectedValue = dataItem.BoardGame;
-                cmbTournaments.SelectedValue = dataItem.Tournament;
-                GamePlayers.Visibility = Visibility.Visible;
-                var tournamentGamePlayer = new TournamentGamePlayer();
-                tournamentGamePlayer.TournamentGameId = TournamentGame.Id;
-                GamePlayers.DataContext = tournamentGamePlayer;
-                cmbPlayers.SelectedItem = null;
-                lstPlayers.ItemsSource = dataItem.TournamentGamePlayers.ToList();
-            }
 
+       
+        private void NewPlayer(object sender, RoutedEventArgs e)
+        {
+            cmbPlayers.SelectedItem = null;
+            GamePlayers.DataContext = new TournamentGamePlayer() {};
+        }
+        private void NewPlayer(int idTournamentGame)
+        {
+            cmbPlayers.SelectedItem = null;
+            GamePlayers.DataContext = new TournamentGamePlayer() { TournamentGameId = idTournamentGame };
+            lstPlayers.ItemsSource = db.TournamentGamePlayers.Where(x => x.TournamentGameId == idTournamentGame).ToList();
         }
         private void New(object sender, RoutedEventArgs e)
         {
             this.RefreshData();
         }
         #endregion
-        private void AñadirJugador(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                TournamentGame tournamentGame = (TournamentGame)this.DataContext;
-                int playerId = ((Player)cmbPlayers.SelectedItem).Id;
-                bool alreadyInGame = tournamentGame.TournamentGamePlayers.Any(x => x.PlayerId == playerId);
-                if (tournamentGame.Id != 0 && !alreadyInGame)
-                {
-                    TournamentGamePlayer gameplayer =(TournamentGamePlayer) GamePlayers.DataContext;
-                    gameplayer.PlayerId = playerId;
-                    db.TournamentGamePlayers.Add(gameplayer);
-                    db.SaveChanges();
-                    cmbPlayers.SelectedItem = null;
-                    GamePlayers.DataContext = new TournamentGamePlayer();
-                    lstPlayers.ItemsSource = db.TournamentGamePlayers.Where(x => x.TournamentGameId == tournamentGame.Id).ToList();
-                }
-                
-            }
-            catch (Exception ex) { }
-        }
+        #region "Utilities"
         private string getWinner(TournamentGame tg)
         {
-            return tg.TournamentGamePlayers.Count>0? tg.TournamentGamePlayers.OrderByDescending(x => x.Score).First().Player.Name:"";
+            return tg.TournamentGamePlayers?.Count>0? tg.TournamentGamePlayers.OrderByDescending(x => x.Score).First().Player.Name:"";
         }
-        //private void loadPlayers(int number)
-        //{
-
-        //    Label labelId = new Label();
-        //    labelId.Content = "Jugador";
-
-
-        //    TextBox textBoxId = new TextBox();
-        //    //textBlockId.Name = "TournamentGamePlayer[0].PlayerId";
-        //    Grid.SetColumn(labelId, 0);
-        //    Grid.SetColumn(textBoxId, 0);
-
-
-        //    Label labelScore = new Label();
-        //    labelScore.Content = "Puntuación";
-        //    TextBox textBoxScore = new TextBox();
-
-        //    Grid.SetColumn(labelScore, 1);
-        //    Grid.SetColumn(textBoxScore, 1);
-        //    //textBlockScore.Name = "TournamentGamePlayer[0].Score";
-        //    GamePlayers.Children.Add(labelId);
-        //    GamePlayers.Children.Add(textBoxId);
-        //    GamePlayers.Children.Add(labelScore);
-        //    GamePlayers.Children.Add(textBoxScore);
-        //}
-        //private void changedGame(object sender, SelectionChangedEventArgs e)
-        //{
-        //    ComboBox cmb = sender as ComboBox;
-        //    var boardGame = cmb.SelectedItem as BoardGame;
-        //    if(boardGame!= null)
-        //    {
-        //        loadPlayers(boardGame.MaxPlayers.Value);
-        //    }
-        //}
+        #endregion
     }
 }

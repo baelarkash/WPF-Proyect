@@ -85,7 +85,8 @@ namespace WpfApp1.DDBB
 					"PlayerId int not null, " +
 					"Score decimal NULL, " +
                     "TournamentGameId int not null, " +
-                    "FOREIGN KEY (TournamentGameId) REFERENCES Tournament(Id)," +
+                    "Position int null, " +
+                    "FOREIGN KEY (TournamentGameId) REFERENCES TournamentGame(Id)," +
                     "FOREIGN KEY (PlayerId) REFERENCES Player(Id))";
 
 				createTable = new SQLiteCommand(tableCommand, db);
