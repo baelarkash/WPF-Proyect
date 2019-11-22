@@ -42,5 +42,17 @@ namespace WpfApp1
 		}
         //https://github.com/Live-Charts/Live-Charts
 
+
+        #region "TableButtons"
+        private void AddButton(object sender, RoutedEventArgs e)
+        {
+            string asd = "";
+        }
+        private void DeleteButton(object sender, RoutedEventArgs e)
+        {
+            string asd = "";
+        }
+        #endregion
+
     }
 }

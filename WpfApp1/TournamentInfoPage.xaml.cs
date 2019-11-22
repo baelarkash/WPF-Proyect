@@ -104,6 +104,7 @@ namespace WpfApp1
                 tournamentGamePlayer.TournamentGameId = TournamentGame.Id;
                 GamePlayers.DataContext = tournamentGamePlayer;
                 cmbPlayers.SelectedItem = null;
+                cmbPlayers.ItemsSource = db.TournamentPlayers.Where(x=>x.TournamentId == TournamentGame.TournamentId).Select(x=>x.Player).ToList();
                 lstPlayers.ItemsSource = dataItem.TournamentGamePlayers.ToList();
             }
         }
@@ -140,7 +141,6 @@ namespace WpfApp1
         }
         private void EditPlayer(object sender, RoutedEventArgs e)
         {
-
 
             var TournamentGamePlayer = lstPlayers.SelectedItem as TournamentGamePlayer;
             GamePlayers.DataContext = TournamentGamePlayer;
@@ -205,7 +205,7 @@ namespace WpfApp1
             cmbTournaments.ItemsSource = torneos;
             cmbTournaments.SelectedValue = torneos.First(x => x.Id == idTournament);
             TournamentName.Text = torneos.First(x => x.Id == idTournament).Name;
-            cmbPlayers.ItemsSource = db.Players.ToList();
+            //cmbPlayers.ItemsSource = db.Players.ToList();
         }
         private void LoadTable(int idTournament)
         {
@@ -246,7 +246,8 @@ namespace WpfApp1
         #region "Utilities"
         private string getWinner(TournamentGame tg)
         {
-            return tg.TournamentGamePlayers?.Count>0? tg.TournamentGamePlayers.OrderByDescending(x => x.Score).First().Player.Name:"";
+            var playerId = tg.TournamentGamePlayers?.Count > 0 ? tg.TournamentGamePlayers.OrderByDescending(x => x.Score).First().PlayerId:0;
+            return playerId == 0?"":db.Players.Find(playerId).Name;
         }
         #endregion
     }

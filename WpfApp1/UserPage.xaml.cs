@@ -56,13 +56,25 @@ namespace WpfApp1
                 item.CreationDate = DateTime.Now;
             }
             db.SaveChanges();
+            RefreshTable();
+        }
+        private void RefreshTable()
+        {
             var items = db.Players.ToList();
             Table.ItemsSource = items;
             this.DataContext = new Player();
         }
-        private void New(object sender, RoutedEventArgs e)
+        private void AddButton(object sender, RoutedEventArgs e)
         {
             this.DataContext = new Player();
+        }
+        private void DeleteButton(object sender, RoutedEventArgs e)
+        {
+            var item = (Player)Table.DataContext;
+            db.Players.Remove(item);
+            db.SaveChanges();
+            RefreshTable();
+            this.DataContext = new BoardGame();
         }
     }
 }

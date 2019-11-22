@@ -16,7 +16,9 @@
             
             <TextBlock HorizontalAlignment="Center" FontSize="25">Listado de torneos</TextBlock>
 
-            <ListView Margin="10" Name="Table">
+            
+            <ListView Margin="10" Name="Table" HorizontalAlignment="Stretch">
+                
                 <ListView.View>
                     <GridView>
                         <GridViewColumn Header="Id" Width="30" DisplayMemberBinding="{Binding Id}" />
@@ -33,6 +35,7 @@
                     </Style>
                 </ListView.ItemContainerStyle>
             </ListView>
+                
         </StackPanel>
 
     </DockPanel>

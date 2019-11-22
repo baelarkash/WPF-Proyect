@@ -79,22 +79,51 @@ namespace WpfApp1.DDBB
 
 				createTable.ExecuteReader();
 
-				//TOURNAMENTGAMEPLAYER
-				tableCommand = "CREATE TABLE IF NOT " +
-					"EXISTS TournamentGamePlayer (Id INTEGER PRIMARY KEY AUTOINCREMENT NOT null, " +
-					"PlayerId int not null, " +
-					"Score decimal NULL, " +
+				
+
+                //TOURNAMENTPLAYER
+                tableCommand = "CREATE TABLE IF NOT " +
+                    "EXISTS TournamentPlayer (Id INTEGER PRIMARY KEY AUTOINCREMENT NOT null, " +
+                    "PlayerId int not null, " +
+                    "TournamentScore decimal NULL, " +
+                    "TournamentId int not null, " +
+                    "Position int null, " +
+                    "GamesWon int null, " +
+                    "FOREIGN KEY (TournamentId) REFERENCES Tournament(Id)," +
+                    "FOREIGN KEY (PlayerId) REFERENCES Player(Id))";
+
+                createTable = new SQLiteCommand(tableCommand, db);
+
+                createTable.ExecuteReader();
+
+                //PLAYERFAVOURITES
+                tableCommand = "CREATE TABLE IF NOT " +
+                   "EXISTS PlayerFavourites (Id INTEGER PRIMARY KEY AUTOINCREMENT NOT null, " +
+                   "PlayerId int not null, " +
+                   "BoardGameId int not null, " +
+                   "Position int not null, " +
+                   "FOREIGN KEY (BoardGameId) REFERENCES BoardGame(Id)," +
+                   "FOREIGN KEY (PlayerId) REFERENCES Player(Id))";
+
+                createTable = new SQLiteCommand(tableCommand, db);
+
+                createTable.ExecuteReader();
+
+                //TOURNAMENTGAMEPLAYER
+                tableCommand = "CREATE TABLE IF NOT " +
+                    "EXISTS TournamentGamePlayer (Id INTEGER PRIMARY KEY AUTOINCREMENT NOT null, " +
+                    "PlayerId int not null, " +
+                    "Score decimal NULL, " +
                     "TournamentGameId int not null, " +
                     "Position int null, " +
                     "FOREIGN KEY (TournamentGameId) REFERENCES TournamentGame(Id)," +
                     "FOREIGN KEY (PlayerId) REFERENCES Player(Id))";
 
-				createTable = new SQLiteCommand(tableCommand, db);
+                createTable = new SQLiteCommand(tableCommand, db);
 
-				createTable.ExecuteReader();
+                createTable.ExecuteReader();
 
-
-			}
+            }
 		}
 	}
 }

@@ -33,9 +33,6 @@
                     <RowDefinition Height="20"/>
                 </Grid.RowDefinitions>
 
-                <Button Grid.Column="0" Grid.Row="0" Click="New">Nuevo</Button>
-               
-            
                 <StackPanel Grid.Column="0" Grid.Row="1">
                 
                 <Label Content="Nombre" />
@@ -54,9 +51,75 @@
                 <StackPanel Grid.Column="6" Grid.Row="2">
                     <Button Click="CreateOrUpdate">Guardar</Button>
                 </StackPanel>
-            
-        </Grid>
+                
+            </Grid>
+            <Grid Margin="20" x:Name="TournamentPlayers" Visibility="Hidden">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Grid.Column="0">
+
+                    <TextBox Name="TournamentId" Text="{Binding TournamentId}" Visibility="Collapsed"></TextBox>
+                    <Label>Jugador</Label>
+                    <ComboBox Name="cmbPlayers" SelectedItem="{Binding PlayerId}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Name}" />
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+
+                </StackPanel>
+
+
+                <StackPanel Grid.Column="4">
+                    <Button Click="CreateOrUpdatePlayer">Guardar</Button>
+                </StackPanel>
+                <StackPanel Grid.Column="6">
+                    <Grid Margin="20">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                            <ColumnDefinition Width="20"></ColumnDefinition>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <ListBox Name="lstPlayers" >
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Player.Name}" />
+                                    </StackPanel>
+
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+
+                        </ListBox>
+                        <StackPanel Grid.Column="2">
+                            <Button>Añadir</Button>
+                            <Button Click="DeletePlayer">Eliminar</Button>
+                            <Button Click="EditPlayer">Editar</Button>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+
+            </Grid>
             <TextBlock HorizontalAlignment="Center" FontSize="25">Listado de torneos</TextBlock>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <Button Click="AddButton" Width="20" HorizontalAlignment="Right">
+                    <Image Source="Content/Images/add.png"/>
+                </Button>
+                <Button Click="DeleteButton" Width="20" HorizontalAlignment="Right">
+                    <Image Source="Content/Images/delete.png"/>
+                </Button>
+            </StackPanel>
         <ListView Margin="10" Name="Table">
             <ListView.View>
                 <GridView>

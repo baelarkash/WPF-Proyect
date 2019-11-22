@@ -93,7 +93,7 @@
 
                     <TextBox Name="TournamentId" Text="{Binding TournamentId}" Visibility="Collapsed"></TextBox>
                     <Label>Jugador</Label>
-                    <ComboBox Name="cmbPlayers" SelectedItem="{Binding PlayerId}">
+                    <ComboBox Name="cmbPlayers" SelectedItem="{Binding Id}">
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding Name}" />

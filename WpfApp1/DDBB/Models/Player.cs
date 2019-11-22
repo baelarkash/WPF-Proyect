@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace WpfApp1.DDBB.Models
 {
-	[Table("Player")]
 	public class Player
 	{
 		//public Player()

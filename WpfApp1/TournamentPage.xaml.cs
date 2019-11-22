@@ -26,8 +26,9 @@ namespace WpfApp1
 		{
 			InitializeComponent();
             this.DataContext = new Tournament();
-            var items = db.Tournaments.ToList();
-            Table.ItemsSource = items;
+            refreshTable();
+
+            cmbPlayers.ItemsSource = db.Players.ToList();
         }
 		public TournamentPage(int id):this()
         {
@@ -35,9 +36,9 @@ namespace WpfApp1
 			string parameter = string.Empty;						
 			var model = db.Tournaments.Find(id);
             this.DataContext = model;
-            var items = db.Tournaments.ToList();
-            Table.ItemsSource = items;
+            refreshTable();
 
+            cmbPlayers.ItemsSource = db.Players.ToList();
         }
         public void CreateOrUpdate(object sender, RoutedEventArgs e)
         {
@@ -60,13 +61,100 @@ namespace WpfApp1
             var item = (sender as ListViewItem);
             if (item != null)
             {
+                try {
+                
                 var tournament = item.DataContext as Tournament;
-                this.DataContext = db.Tournaments.Find(tournament.Id);
+                var dataItem = db.Tournaments.Find(tournament.Id);
+                this.DataContext = dataItem;
+
+                TournamentPlayers.Visibility = Visibility.Visible;
+                var tournamentPlayer = new TournamentPlayer();
+                tournamentPlayer.TournamentId = dataItem.Id;
+                TournamentPlayers.DataContext = tournamentPlayer;
+                cmbPlayers.SelectedItem = null;
+                lstPlayers.ItemsSource = dataItem.TournamentPlayers.ToList();
+
+                }catch(Exception esd)
+                {
+                    string asd = "";
+                }
             }
         }
-        private void New(object sender, RoutedEventArgs e)
+        private void refreshTable()
+        {
+            var items = db.Tournaments.ToList();
+            Table.ItemsSource = items;
+        }
+        private void AddButton(object sender, RoutedEventArgs e)
         {
             this.DataContext = new Tournament();
         }
+        private void DeleteButton(object sender, RoutedEventArgs e)
+        {
+            var item = (Tournament)Table.DataContext;
+            db.Tournaments.Remove(item);
+            db.SaveChanges();
+            refreshTable();
+            this.DataContext = new BoardGame();
+        }
+        #region "TournamentPlayer"
+        private void CreateOrUpdatePlayer(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Tournament tournament = (Tournament)this.DataContext;
+                var item = TournamentPlayers.DataContext as TournamentPlayer;
+                if (item.Id != 0)
+                {
+                    db.SaveChanges();
+                    NewPlayer(tournament.Id);
+                    refreshTable();
+                }
+                else
+                {
+
+                    int playerId = ((Player)cmbPlayers.SelectedItem).Id;
+                    bool alreadyInGame = tournament.TournamentPlayers.Any(x => x.PlayerId == playerId);
+
+                    if (tournament.Id != 0 && !alreadyInGame)
+                    {
+                        TournamentPlayer gameplayer = (TournamentPlayer)TournamentPlayers.DataContext;
+                        gameplayer.PlayerId = playerId;
+                        db.TournamentPlayers.Add(gameplayer);
+                        db.SaveChanges();
+                        NewPlayer(tournament.Id);
+                        refreshTable();
+                    }
+                }
+            }
+            catch (Exception ex) { }
+        }
+        private void EditPlayer(object sender, RoutedEventArgs e)
+        {
+            var TournamentPlayer = lstPlayers.SelectedItem as TournamentPlayer;
+            TournamentPlayers.DataContext = TournamentPlayer;
+            var tournament = db.TournamentPlayers.Find(TournamentPlayer.Id);
+            cmbPlayers.SelectedValue = tournament.Player;
+
+        }
+        private void DeletePlayer(object sender, RoutedEventArgs e)
+        {
+
+            var TournamentPlayer = lstPlayers.SelectedItem as TournamentPlayer;
+            var idTournamentGame = TournamentPlayer.TournamentId;
+            db.TournamentPlayers.Remove(TournamentPlayer);
+            db.SaveChanges();
+
+            NewPlayer(idTournamentGame);
+            refreshTable();
+
+        }
+        private void NewPlayer(int idTournamentGame)
+        {
+            cmbPlayers.SelectedItem = null;
+            TournamentPlayers.DataContext = new TournamentPlayer() { TournamentId = idTournamentGame };
+            lstPlayers.ItemsSource = db.TournamentPlayers.Where(x => x.TournamentId == idTournamentGame).ToList();
+        }
+        #endregion
     }
 }

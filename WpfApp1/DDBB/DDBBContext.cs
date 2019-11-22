@@ -19,6 +19,8 @@ namespace WpfApp1.DDBB
         public DbSet<BoardGame> BoardGames { get; set; }
         public DbSet<TournamentGame> TournamentGames { get; set; }
         public DbSet<TournamentGamePlayer> TournamentGamePlayers { get; set; }
+        public DbSet<TournamentPlayer> TournamentPlayers { get; set; }
+        public DbSet<PlayerFavourite> playerFavourites { get; set; }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
 		{

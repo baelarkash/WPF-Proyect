@@ -27,19 +27,17 @@ namespace WpfApp1
 		{
 			InitializeComponent();
             this.DataContext = new BoardGame();
-            var items = db.BoardGames.ToList();
-            Table.ItemsSource = items;
+            refreshTable();
             this.cmbPlayers.ItemsSource = db.Players.ToList();
 
         }
 		public BoardGamePage(int id):this()
         {
             InitializeComponent();
-			string parameter = string.Empty;						
-			var model = db.BoardGames.Find(id);
-            this.DataContext = model;
-            var items = db.BoardGames.ToList();
-            Table.ItemsSource = items;
+			string parameter = string.Empty;
+            this.cmbPlayers.ItemsSource = db.Players.ToList();
+            loadBoardGame(id);
+            refreshTable();
 
         }
         public void CreateOrUpdate(object sender, RoutedEventArgs e)
@@ -65,13 +63,31 @@ namespace WpfApp1
             if (item != null)
             {
                 var boardGame = item.DataContext as BoardGame;
-                var dataItem = db.BoardGames.Find(boardGame.Id);
-                this.DataContext = dataItem;
-                cmbPlayers.SelectedValue = dataItem.Owner;
+                loadBoardGame(boardGame.Id);
             }
         }
-        private void New(object sender, RoutedEventArgs e)
+        private void loadBoardGame(int id)
         {
+            var dataItem = db.BoardGames.Find(id);
+            this.DataContext = dataItem;
+            cmbPlayers.SelectedValue = dataItem.Owner;
+        }
+        private void refreshTable()
+        {
+            var items = db.BoardGames.ToList();
+            Table.ItemsSource = items;
+        }
+
+        private void AddButton(object sender, RoutedEventArgs e)
+        {
+            this.DataContext = new BoardGame();
+        }
+        private void DeleteButton(object sender, RoutedEventArgs e)
+        {
+            var item = (BoardGame)Table.DataContext;
+            db.BoardGames.Remove(item);
+            db.SaveChanges();
+            refreshTable();
             this.DataContext = new BoardGame();
         }
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)

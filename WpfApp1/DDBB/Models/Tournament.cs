@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace WpfApp1.DDBB.Models
 {
-	[Table("Tournament")]
 	public class Tournament
 	{
 		public int Id { get; set; }
@@ -18,5 +17,6 @@ namespace WpfApp1.DDBB.Models
 		public int WinnerId { get; set; }
 
 		public virtual Player Winner { get; set; }
-	}
+        public virtual ICollection<TournamentPlayer> TournamentPlayers { get; set; }
+    }
 }

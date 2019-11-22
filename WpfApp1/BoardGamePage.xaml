@@ -33,7 +33,6 @@
                     <RowDefinition Height="20"/>
                 </Grid.RowDefinitions>
 
-                <Button Grid.Column="0" Grid.Row="0" Click="New">Nuevo</Button>
             <StackPanel Grid.Column="0" Grid.Row="1">
                 
                 <Label Content="Nombre" />
@@ -76,6 +75,14 @@
             
         </Grid>
             <TextBlock HorizontalAlignment="Center" FontSize="25">Listado de juegos de mesa</TextBlock>
+            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
+                <Button Click="AddButton" Width="20" HorizontalAlignment="Right">
+                    <Image Source="Content/Images/add.png"/>
+                </Button>
+                <Button Click="DeleteButton" Width="20" HorizontalAlignment="Right">
+                    <Image Source="Content/Images/delete.png"/>
+                </Button>
+            </StackPanel>
         <ListView Margin="10" Name="Table">
             <ListView.View>
                 <GridView>
