@@ -14,8 +14,8 @@ namespace WpfApp1.DDBB.Models
         public int? TournamentGameId { get; set; }
         public int? Position { get; set; }
 
-        public TournamentGame TournamentGame { get; set; }
-        public Player Player { get; set; }
+        public virtual TournamentGame TournamentGame { get; set; }
+        public virtual Player Player { get; set; }
 
     }
 }

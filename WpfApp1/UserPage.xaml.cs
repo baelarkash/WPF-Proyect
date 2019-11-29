@@ -29,13 +29,15 @@ namespace WpfApp1
             this.DataContext = new Player();
             var items = db.Players.ToList();
 			Table.ItemsSource = items;
-		}
+            cmbBoardGames.ItemsSource = db.BoardGames.ToList();
+        }
         public UsersPage(int id)
         {
             InitializeComponent();
             this.DataContext = db.Players.Find(id);
             var items = db.Players.ToList();
             Table.ItemsSource = items;
+            cmbBoardGames.ItemsSource = db.BoardGames.ToList();
         }
         private void Edit(object sender, MouseButtonEventArgs e)
         {
@@ -75,6 +77,47 @@ namespace WpfApp1
             db.SaveChanges();
             RefreshTable();
             this.DataContext = new BoardGame();
+        }
+
+
+        private void EditFavourite(object sender,RoutedEventArgs e)
+        {
+            var item = (sender as ListViewItem);
+            if (item != null)
+            {
+                var PlayerF = item.DataContext as PlayerFavourite;
+                var dataItem = db.playerFavourites.Find(PlayerF.Id);
+
+                PlayerFavourite.DataContext = dataItem;
+                cmbBoardGames.SelectedItem = dataItem.BoardGame;
+            }
+        }
+        private void CreateOrUpdateFavourite(object sender,RoutedEventArgs e)
+        {
+            var item = (PlayerFavourite)PlayerFavourite.DataContext;
+            if(item.Id != 0)
+            {
+                db.SaveChanges();
+            }
+            else
+            {
+
+                db.playerFavourites.Add(item);
+            }
+            PlayerFavourite.DataContext = new PlayerFavourite();
+            cmbBoardGames.SelectedItem = null;
+        }
+        private void AddFavouriteButton(object sender,RoutedEventArgs e)
+        {
+            PlayerFavourite.DataContext = new PlayerFavourite();
+            cmbBoardGames.SelectedItem = null;
+        }
+        private void DeleteFavouriteButton(object sender,RoutedEventArgs e)
+        {
+            var playerFavourite = (PlayerFavourite)Table2.DataContext;
+            db.playerFavourites.Remove(playerFavourite);
+            PlayerFavourite.DataContext = new PlayerFavourite();
+            cmbBoardGames.SelectedItem = null;
         }
     }
 }

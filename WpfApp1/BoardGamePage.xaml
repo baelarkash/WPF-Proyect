@@ -13,97 +13,99 @@
         <ToolBar DockPanel.Dock="Top">
             <local:Menu/>
         </ToolBar>
-        <StackPanel>
-            
-            <Grid Margin="20">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="20"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="20"/>
-                </Grid.RowDefinitions>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
 
-            <StackPanel Grid.Column="0" Grid.Row="1">
-                
-                <Label Content="Nombre" />
-                <TextBox TabIndex="0" Text="{Binding Path=Name}"></TextBox>
-                    <Label Content="Duración"/>
-                    <TextBox TabIndex="4" Text="{Binding Path=Duration}"></TextBox>
-                </StackPanel>
-                <StackPanel Grid.Column="2" Grid.Row="1">
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
 
-                <Label Content="Mínimo Jugadores"/>
-                    <TextBox TabIndex="1" Text="{Binding Path=MinPlayers}" PreviewTextInput="NumberValidationTextBox">
-                        <!--<i:Interaction.Behaviors>
+                    <StackPanel Grid.Column="0" Grid.Row="1">
+
+                        <Label Content="Nombre" />
+                        <TextBox TabIndex="0" Text="{Binding Path=Name}"></TextBox>
+                        <Label Content="Duración"/>
+                        <TextBox TabIndex="4" Text="{Binding Path=Duration}"></TextBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="1">
+
+                        <Label Content="Mínimo Jugadores"/>
+                        <TextBox TabIndex="1" Text="{Binding Path=MinPlayers}" PreviewTextInput="NumberValidationTextBox">
+                            <!--<i:Interaction.Behaviors>
                             <local:TextBoxInputRegExBehaviour RegularExpression="^\d+$" MaxLength="9" EmptyValue="0" />
                         </i:Interaction.Behaviors>-->
-                    </TextBox>
-                    <Label Content="Peso"/>
-                    <TextBox TabIndex="5" Text="{Binding Path=Weight}"></TextBox>
-                </StackPanel>
-                <StackPanel Grid.Column="4" Grid.Row="1">
-                    <Label Content="Máximo Jugadores" PreviewTextInput="NumberValidationTextBox"/>
-                    <TextBox TabIndex="2" Text="{Binding Path=MaxPlayers}"></TextBox>
-                    <Label Content="Puntuación"/>
-                    <TextBox TabIndex="6" Text="{Binding Path=Score}"></TextBox>
-                    <!--<Label Content="Fecha Fin" TabIndex="2"/>
+                        </TextBox>
+                        <Label Content="Peso"/>
+                        <TextBox TabIndex="5" Text="{Binding Path=Weight}"></TextBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="4" Grid.Row="1">
+                        <Label Content="Máximo Jugadores" PreviewTextInput="NumberValidationTextBox"/>
+                        <TextBox TabIndex="2" Text="{Binding Path=MaxPlayers}"></TextBox>
+                        <Label Content="Puntuación"/>
+                        <TextBox TabIndex="6" Text="{Binding Path=Score}"></TextBox>
+                        <!--<Label Content="Fecha Fin" TabIndex="2"/>
                     <TextBox TabIndex="0" Text="{Binding Path=Owner.Name}"></TextBox>-->
+                    </StackPanel>
+                    <StackPanel Grid.Column="6" Grid.Row="1">
+                        <Label Content="Propietario"/>
+                        <ComboBox Name="cmbPlayers" SelectedItem="{Binding Path=OwnerId}" TabIndex="3">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="6" Grid.Row="2">
+                        <Button Click="CreateOrUpdate">Guardar</Button>
+                    </StackPanel>
+
+                </Grid>
+                <TextBlock HorizontalAlignment="Center" FontSize="25">Listado de juegos de mesa</TextBlock>
+                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
+                    <Button Click="AddButton" Width="20" HorizontalAlignment="Right">
+                        <Image Source="Content/Images/add.png"/>
+                    </Button>
+                    <Button Click="DeleteButton" Width="20" HorizontalAlignment="Right">
+                        <Image Source="Content/Images/delete.png"/>
+                    </Button>
                 </StackPanel>
-                <StackPanel Grid.Column="6" Grid.Row="1">
-                    <Label Content="Propietario"/>
-                    <ComboBox Name="cmbPlayers" SelectedItem="{Binding Path=OwnerId}" TabIndex="3">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
-                <StackPanel Grid.Column="6" Grid.Row="2">
-                    <Button Click="CreateOrUpdate">Guardar</Button>
-                </StackPanel>
-            
-        </Grid>
-            <TextBlock HorizontalAlignment="Center" FontSize="25">Listado de juegos de mesa</TextBlock>
-            <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
-                <Button Click="AddButton" Width="20" HorizontalAlignment="Right">
-                    <Image Source="Content/Images/add.png"/>
-                </Button>
-                <Button Click="DeleteButton" Width="20" HorizontalAlignment="Right">
-                    <Image Source="Content/Images/delete.png"/>
-                </Button>
+                <ListView Margin="10" Name="Table">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Id" Width="30" DisplayMemberBinding="{Binding Id}" />
+                            <GridViewColumn Header="Nombre" Width="150" DisplayMemberBinding="{Binding Name}" />
+                            <GridViewColumn Header="Fecha creación" Width="150" DisplayMemberBinding="{Binding CreationDate}" />
+                            <GridViewColumn Header="Mínimo Jugadores" Width="150" DisplayMemberBinding="{Binding MinPlayers}" />
+                            <GridViewColumn Header="Mánimo Jugadores" Width="150" DisplayMemberBinding="{Binding MaxPlayers}" />
+                            <GridViewColumn Header="Duración" Width="150" DisplayMemberBinding="{Binding Duration}" />
+                            <GridViewColumn Header="Peso" Width="150" DisplayMemberBinding="{Binding Weight}" />
+                            <GridViewColumn Header="Puntuación" Width="150" DisplayMemberBinding="{Binding Score}" />
+                            <GridViewColumn Header="Propietario" Width="150" DisplayMemberBinding="{Binding Owner.Name}" />
+                        </GridView>
+                    </ListView.View>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Edit" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
             </StackPanel>
-        <ListView Margin="10" Name="Table">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Id" Width="30" DisplayMemberBinding="{Binding Id}" />
-                    <GridViewColumn Header="Nombre" Width="150" DisplayMemberBinding="{Binding Name}" />
-                    <GridViewColumn Header="Fecha creación" Width="150" DisplayMemberBinding="{Binding CreationDate}" />
-                    <GridViewColumn Header="Mínimo Jugadores" Width="150" DisplayMemberBinding="{Binding MinPlayers}" />
-                        <GridViewColumn Header="Mánimo Jugadores" Width="150" DisplayMemberBinding="{Binding MaxPlayers}" />
-                        <GridViewColumn Header="Duración" Width="150" DisplayMemberBinding="{Binding Duration}" />
-                        <GridViewColumn Header="Peso" Width="150" DisplayMemberBinding="{Binding Weight}" />
-                        <GridViewColumn Header="Puntuación" Width="150" DisplayMemberBinding="{Binding Score}" />
-                        <GridViewColumn Header="Propietario" Width="150" DisplayMemberBinding="{Binding Owner.Name}" />
-                    </GridView>
-            </ListView.View>
-            <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Edit" />
-                        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-                    </Style>
-                </ListView.ItemContainerStyle>
-        </ListView>
-        </StackPanel>
+        </ScrollViewer>
     </DockPanel>
 </Page>

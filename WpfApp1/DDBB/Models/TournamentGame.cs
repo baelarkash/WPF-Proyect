@@ -16,8 +16,8 @@ namespace WpfApp1.DDBB.Models
         public bool Finished { get; set; }
 
 
-        public Tournament Tournament { get; set; }
-        public BoardGame BoardGame { get; set; }
+        public virtual Tournament Tournament { get; set; }
+        public virtual BoardGame BoardGame { get; set; }
 
 
 

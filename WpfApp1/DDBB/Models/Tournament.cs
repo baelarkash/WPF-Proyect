@@ -18,5 +18,6 @@ namespace WpfApp1.DDBB.Models
 
 		public virtual Player Winner { get; set; }
         public virtual ICollection<TournamentPlayer> TournamentPlayers { get; set; }
+        public virtual ICollection<TournamentGame> TournamentGames { get; set; }
     }
 }

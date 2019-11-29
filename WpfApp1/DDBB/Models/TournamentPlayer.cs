@@ -12,12 +12,13 @@ namespace WpfApp1.DDBB.Models
     {
         public int Id { get; set; }
         public int PlayerId { get; set; }
+        public decimal? TournamentScore { get; set; }
         public int TournamentId { get; set; }
         public int? Position { get; set; }
         public int? GamesWon { get; set; }
 
-        public Tournament Tournament { get; set; }
-        public Player Player { get; set; }
+        public virtual Tournament Tournament { get; set; }
+        public virtual Player Player { get; set; }
 
     }
 }

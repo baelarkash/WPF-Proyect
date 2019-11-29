@@ -72,17 +72,18 @@ namespace WpfApp1
                 string[] time = Hour.Text.Split(':');
                 item.StartTime = item.StartTime.Value.AddHours(int.Parse(time[0]));
                 item.StartTime = item.StartTime.Value.AddMinutes(int.Parse(time[1]));
+                db.SaveChanges();
                 if (item.Finished) {
-                    if (item.TournamentGamePlayers?.Count() > 0)
-                    {
-                        foreach( var player in item.TournamentGamePlayers.OrderBy(x=>x.Score).Select((value, i) => new { i, value }))
-                        {
-                            player.value.Position = player.i + 1;
-                        }
-                    }
+                    //if (item.TournamentGamePlayers?.Count() > 0)
+                    //{
+                    //    foreach( var player in item.TournamentGamePlayers.OrderBy(x=>x.Score).Select((value, i) => new { i, value }))
+                    //    {
+                    //        player.value.Position = player.i + 1;
+                    //    }
+                    //}
+                    Logic.Tournament.recalculateScores(item.TournamentId);
                 }
 
-                db.SaveChanges();
             }
             catch (Exception ex) { }
             LoadTable(SelectedTournamentId);
@@ -105,7 +106,15 @@ namespace WpfApp1
                 GamePlayers.DataContext = tournamentGamePlayer;
                 cmbPlayers.SelectedItem = null;
                 cmbPlayers.ItemsSource = db.TournamentPlayers.Where(x=>x.TournamentId == TournamentGame.TournamentId).Select(x=>x.Player).ToList();
-                lstPlayers.ItemsSource = dataItem.TournamentGamePlayers.ToList();
+                if(dataItem.TournamentGamePlayers!= null)
+                {
+                    lstPlayers.ItemsSource = dataItem.TournamentGamePlayers.ToList();
+                }
+                else
+                {
+                    lstPlayers.ItemsSource = null;
+                }
+                
             }
         }
         private void CreateOrUpdatePlayer(object sender, RoutedEventArgs e)
@@ -161,6 +170,23 @@ namespace WpfApp1
             NewPlayer(idTournamentGame);
             LoadTable(idTournament);
 
+        }
+        private void DeleteButton(object sender,RoutedEventArgs e)
+        {            
+            var game = (TournamentGame)Table.DataContext;
+            var idTournament = game.TournamentId;
+
+            db.TournamentGamePlayers.RemoveRange(game.TournamentGamePlayers);
+            
+            db.TournamentGames.Remove(game);
+            db.SaveChanges();
+            LoadTable(idTournament);
+            LoadTablePuntuations(idTournament);
+            this.DataContext = new BoardGame();
+        }
+        private void AddButton(object sender,RoutedEventArgs e)
+        {
+            this.RefreshData();
         }
         #endregion
         #region "Validations"
@@ -224,8 +250,14 @@ namespace WpfApp1
                 model.Add(aux);
             }                        
             Table.ItemsSource = model;
+            LoadTablePuntuations(idTournament);
         }
-
+        private void LoadTablePuntuations(int idTournament)
+        {
+            var db2 = new DDBB.DDBBContext();
+            var items = db2.TournamentPlayers.Where(x => x.TournamentId == idTournament).OrderByDescending(x => x.TournamentScore).ToList();
+            Table2.ItemsSource = items;
+        }
        
         private void NewPlayer(object sender, RoutedEventArgs e)
         {
@@ -246,8 +278,9 @@ namespace WpfApp1
         #region "Utilities"
         private string getWinner(TournamentGame tg)
         {
-            var playerId = tg.TournamentGamePlayers?.Count > 0 ? tg.TournamentGamePlayers.OrderByDescending(x => x.Score).First().PlayerId:0;
-            return playerId == 0?"":db.Players.Find(playerId).Name;
+            //var playerId = tg.TournamentGamePlayers?.Count > 0 ? tg.TournamentGamePlayers.OrderByDescending(x => x.Score).First().PlayerId:0;
+            //return playerId == 0?"":db.Players.Find(playerId).Name;
+            return tg.TournamentGamePlayers?.Count > 0 ? tg.TournamentGamePlayers.OrderByDescending(x => x.Score).First().Player.Name : "";
         }
         #endregion
     }

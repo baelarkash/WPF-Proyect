@@ -5,160 +5,185 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:WpfApp1"
       xmlns:Models="clr-namespace:WpfApp1.DDBB.Models" x:Class="WpfApp1.TournamentInfoPage"
-      mc:Ignorable="d" 
+      mc:Ignorable="d"
       d:DesignHeight="450" d:DesignWidth="800"
       Title="TournamentInfoPage" >
-    <DockPanel>
-
-        <ToolBar DockPanel.Dock="Top">
-            <local:Menu/>
-        </ToolBar>
-        <StackPanel>
-            <TextBlock HorizontalAlignment="Center" FontSize="25">Información del torneo 
+    
+        <DockPanel>
+            
+            <ToolBar DockPanel.Dock="Top">
+                <local:Menu/>
+            </ToolBar>
+        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock HorizontalAlignment="Center" FontSize="25">Información del torneo 
                 <TextBlock Name="TournamentName"></TextBlock>
             </TextBlock>
 
-            <Grid Margin="20">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="20"/>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="20"/>
-                </Grid.RowDefinitions>
+                <Grid Margin="20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition Height="20"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Column="0" Grid.Row="0">
 
-                <Button Grid.Column="0" Grid.Row="0" Click="New">Nuevo</Button>
-
-
-                <StackPanel Grid.Column="0" Grid.Row="1">
-
-                    <Label Content="Fecha Inicio" />
-                    <DatePicker TabIndex="0" Name="StartTime" SelectedDate="{Binding Path=StartTime}">
-                    </DatePicker>
-                    <Label Content="Finalizado"/>
-                    <CheckBox TabIndex="4" Name="Finished" IsChecked="{Binding Finished}"></CheckBox>
-                </StackPanel>
-                <StackPanel Grid.Column="2" Grid.Row="1">
-                    <Label Content="Hora"/>
-                    <TextBox TabIndex="1" Name="Hour" Text="{Binding Path=StartTime,StringFormat=HH:mm}" PreviewTextInput="TimeValidationTextBox"></TextBox>
-                </StackPanel>
-                <StackPanel Grid.Column="4" Grid.Row="1">
-                    <Label Content="Torneo"/>
-                    <ComboBox TabIndex="2" Name="cmbTournaments">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
-                <StackPanel Grid.Column="6" Grid.Row="1">
-                    <Label Content="Juego"/>
-                    <ComboBox TabIndex="3" Name="cmbBoardGames">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-                </StackPanel>
-                <StackPanel Grid.Column="6" Grid.Row="2">
-                    <Button TabIndex="5" Click="CreateOrUpdate">Guardar</Button>
-                </StackPanel>
-
-            </Grid>
-            <Grid Margin="20" x:Name="GamePlayers" Visibility="Hidden">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="20"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                </Grid.RowDefinitions>
-                <StackPanel Grid.Column="0">
-
-                    <TextBox Name="TournamentId" Text="{Binding TournamentId}" Visibility="Collapsed"></TextBox>
-                    <Label>Jugador</Label>
-                    <ComboBox Name="cmbPlayers" SelectedItem="{Binding Id}">
-                        <ComboBox.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Name}" />
-                            </DataTemplate>
-                        </ComboBox.ItemTemplate>
-                    </ComboBox>
-
-                </StackPanel>
-
-                <StackPanel Grid.Column="2">
-                    <Label>Puntuación</Label>
-                    <TextBox Name="Score" Text="{Binding Score}" PreviewTextInput="NumberValidationTextBox"></TextBox>
-                </StackPanel>
-                <StackPanel Grid.Column="4">
-                    <Button Click="CreateOrUpdatePlayer">Guardar</Button>
-                </StackPanel>
-                <StackPanel Grid.Column="6">
-                    <Grid Margin="20">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                            <ColumnDefinition Width="20"></ColumnDefinition>
-                            <ColumnDefinition Width="*"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <ListBox Name="lstPlayers" >
-                            <ListBox.ItemTemplate>
+                        <Label Content="Fecha Inicio" />
+                        <DatePicker TabIndex="0" Name="StartTime" SelectedDate="{Binding Path=StartTime}">
+                        </DatePicker>
+                        <Label Content="Finalizado"/>
+                        <CheckBox TabIndex="4" Name="Finished" IsChecked="{Binding Finished}"></CheckBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="2" Grid.Row="0">
+                        <Label Content="Hora"/>
+                        <TextBox TabIndex="1" Name="Hour" Text="{Binding Path=StartTime,StringFormat=HH:mm}" PreviewTextInput="TimeValidationTextBox"></TextBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="4" Grid.Row="0">
+                        <Label Content="Torneo"/>
+                        <ComboBox TabIndex="2" Name="cmbTournaments">
+                            <ComboBox.ItemTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Player.Name}" />
-                                        <TextBlock Text=" : " />
-                                        <TextBlock Text="{Binding Score}"></TextBlock>
-                                    </StackPanel>
-
+                                    <TextBlock Text="{Binding Name}" />
                                 </DataTemplate>
-                            </ListBox.ItemTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="6" Grid.Row="0">
+                        <Label Content="Juego"/>
+                        <ComboBox TabIndex="3" Name="cmbBoardGames">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="6" Grid.Row="1">
+                        <Button TabIndex="5" Click="CreateOrUpdate">Guardar</Button>
+                    </StackPanel>
 
-                        </ListBox>
-                        <StackPanel Grid.Column="2">
-                            <Button>Añadir</Button>
-                            <Button Click="DeletePlayer">Eliminar</Button>
-                            <Button Click="EditPlayer">Editar</Button>
-                        </StackPanel>
-                    </Grid>
+                </Grid>
+                <Grid Margin="20" x:Name="GamePlayers" Visibility="Hidden">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="20"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Column="0">
+
+                        <TextBox Name="TournamentId" Text="{Binding TournamentId}" Visibility="Collapsed"></TextBox>
+                        <Label>Jugador</Label>
+                        <ComboBox Name="cmbPlayers" SelectedItem="{Binding Id}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Name}" />
+                                </DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <Label>Puntuación</Label>
+                        <TextBox Name="Score" Text="{Binding Score}" PreviewTextInput="NumberValidationTextBox"></TextBox>
+                    </StackPanel>
+                    <StackPanel Grid.Column="4">
+                        <Button Click="CreateOrUpdatePlayer">Guardar</Button>
+                    </StackPanel>
+                    <StackPanel Grid.Column="6">
+                        <Grid Margin="20">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="20"></ColumnDefinition>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <ListBox Name="lstPlayers" >
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding Player.Name}" />
+                                            <TextBlock Text=" : " />
+                                            <TextBlock Text="{Binding Score}"></TextBlock>
+                                        </StackPanel>
+
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+
+                            </ListBox>
+                            <StackPanel Grid.Column="2">
+                                <Button>Añadir</Button>
+                                <Button Click="DeletePlayer">Eliminar</Button>
+                                <Button Click="EditPlayer">Editar</Button>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+
+                </Grid>
+                <TextBlock HorizontalAlignment="Center" FontSize="25">Puntuaciones</TextBlock>
+                <ListView Margin="10" Name="Table2">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Id" Width="30" DisplayMemberBinding="{Binding Id}" />
+                            <GridViewColumn Header="Jugador" Width="150" DisplayMemberBinding="{Binding Player.Name}" />
+                            <GridViewColumn Header="Puntuacion" Width="150" DisplayMemberBinding="{Binding TournamentScore}"></GridViewColumn>
+                            <GridViewColumn Header="Juegos ganados" Width="150" DisplayMemberBinding="{Binding GamesWon}" />
+                        </GridView>
+                    </ListView.View>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Edit" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
+                <TextBlock HorizontalAlignment="Center" FontSize="25">Listado de partidas</TextBlock>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                    <Button Click="AddButton" Width="20" HorizontalAlignment="Right">
+                        <Image Source="Content/Images/add.png"/>
+                    </Button>
+                    <Button Click="DeleteButton" Width="20" HorizontalAlignment="Right">
+                        <Image Source="Content/Images/delete.png"/>
+                    </Button>
                 </StackPanel>
+                <ListView Margin="10" Name="Table">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Id" Width="30" DisplayMemberBinding="{Binding Id}" />
+                            <GridViewColumn Header="Creacion" Width="150" DisplayMemberBinding="{Binding CreationDate}" />
+                            <GridViewColumn Header="Fecha inicio" Width="150" DisplayMemberBinding="{Binding StartTime,StringFormat=dd/MM/yyyy}" />
+                            <GridViewColumn Header="Hora inicio" Width="150" DisplayMemberBinding="{Binding StartTime,StringFormat=HH:mm}" />
+                            <GridViewColumn Header="Juego" Width="150" DisplayMemberBinding="{Binding BoardGame.Name}"></GridViewColumn>
+                            <GridViewColumn Header="Torneo" Width="150" DisplayMemberBinding="{Binding Tournament.Name}"></GridViewColumn>
+                            <GridViewColumn Header="Ganador" Width="150" DisplayMemberBinding="{Binding WinnerName}" />
+                        </GridView>
+                    </ListView.View>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Edit" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
 
-            </Grid>
-            <TextBlock HorizontalAlignment="Center" FontSize="25">Listado de partidas</TextBlock>
-            <ListView Margin="10" Name="Table">
-                <ListView.View>
-                    <GridView>
-                        <GridViewColumn Header="Id" Width="30" DisplayMemberBinding="{Binding Id}" />
-                        <GridViewColumn Header="Creacion" Width="150" DisplayMemberBinding="{Binding CreationDate}" />
-                        <GridViewColumn Header="Fecha inicio" Width="150" DisplayMemberBinding="{Binding StartTime,StringFormat=dd/MM/yyyy}" />
-                        <GridViewColumn Header="Hora inicio" Width="150" DisplayMemberBinding="{Binding StartTime,StringFormat=HH:mm}" />
-                        <GridViewColumn Header="Juego" Width="150" DisplayMemberBinding="{Binding BoardGame.Name}"></GridViewColumn>
-                        <GridViewColumn Header="Torneo" Width="150" DisplayMemberBinding="{Binding Tournament.Name}"></GridViewColumn>
-                        <GridViewColumn Header="Ganador" Width="150" DisplayMemberBinding="{Binding WinnerName}" />
-                    </GridView>
-                </ListView.View>
-                <ListView.ItemContainerStyle>
-                    <Style TargetType="ListViewItem">
-                        <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Edit" />
-                        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-                    </Style>
-                </ListView.ItemContainerStyle>
-            </ListView>
-        </StackPanel>
+            </StackPanel>
+
+        </ScrollViewer>
     </DockPanel>
 </Page>
