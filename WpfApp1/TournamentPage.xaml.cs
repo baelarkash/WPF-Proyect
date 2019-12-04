@@ -97,6 +97,19 @@ namespace WpfApp1
             refreshTable();
             this.DataContext = new BoardGame();
         }
+        private void generateMatchMaking(object sender,RoutedEventArgs e)
+        {
+
+            Tournament item = (Tournament)this.DataContext;
+            if(item.Id != 0)
+            {
+                List<decimal> hours = new List<decimal>();
+                hours.Add(10);
+                hours.Add(15);
+                Logic.Tournament.matchMaking(item.Id, hours);
+            }
+            
+        }
         #region "TournamentPlayer"
         private void CreateOrUpdatePlayer(object sender, RoutedEventArgs e)
         {
@@ -114,7 +127,12 @@ namespace WpfApp1
                 {
 
                     int playerId = ((Player)cmbPlayers.SelectedItem).Id;
-                    bool alreadyInGame = tournament.TournamentPlayers.Any(x => x.PlayerId == playerId);
+                    bool alreadyInGame = false;
+                    if (tournament.TournamentPlayers!= null)
+                    {
+                        alreadyInGame = tournament.TournamentPlayers.Any(x => x.PlayerId == playerId);
+                    }
+                    
 
                     if (tournament.Id != 0 && !alreadyInGame)
                     {

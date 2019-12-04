@@ -89,6 +89,7 @@
     <Compile Include="DDBB\Models\PlayerFavourite.cs" />
     <Compile Include="DDBB\Models\TournamentPlayer.cs" />
     <Compile Include="DDBB\Models\TournamentGamePlayer.cs" />
+    <Compile Include="Logic\Estructures\MatchMaking.cs" />
     <Compile Include="Logic\Estructures\TournamentPlayerScoring.cs" />
     <Compile Include="Logic\Tournament.cs" />
     <Compile Include="MainPage.xaml.cs">

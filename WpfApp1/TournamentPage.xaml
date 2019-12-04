@@ -14,7 +14,7 @@
         </ToolBar>
         <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <StackPanel>
-
+                <Button Click="generateMatchMaking">MatchMaking!</Button>
 
                 <Grid Margin="20">
                     <Grid.ColumnDefinitions>

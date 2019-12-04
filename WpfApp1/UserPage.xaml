@@ -87,7 +87,7 @@
 
                     <StackPanel Grid.Column="0" Grid.Row="1">
 
-                        <Label Content="Nombre"/>
+                        <Label Content="Position"/>
                         <TextBox TabIndex="0" Text="{Binding Path=Position}"></TextBox>
                     </StackPanel>
                     <StackPanel Grid.Column="2" Grid.Row="1">
@@ -104,23 +104,31 @@
                     </StackPanel>
                     <StackPanel Grid.Column="4" Grid.Row="1">
                         <Label Content=""></Label>
-                        <Button Click="CreateOrUpdate">Guardar</Button>
+                        <Button Click="CreateOrUpdateFavourite">Guardar</Button>
                     </StackPanel>
                     <StackPanel Grid.Column="6" Grid.Row="1">
                     </StackPanel>
 
                 </Grid>
                 <TextBlock HorizontalAlignment="Center" FontSize="25">Listado de favoritos</TextBlock>
+                <StackPanel Orientation="Horizontal" Margin="10" HorizontalAlignment="Right">
+                    <Button Click="AddFavouriteButton" Width="20" HorizontalAlignment="Right">
+                        <Image Source="Content/Images/add.png"/>
+                    </Button>
+                    <Button Click="DeleteFavouriteButton" Width="20" HorizontalAlignment="Right">
+                        <Image Source="Content/Images/delete.png"/>
+                    </Button>
+                </StackPanel>
                 <ListView Margin="10" Name="Table2">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="Id" Width="30" DisplayMemberBinding="{Binding Position}" />
-                            <GridViewColumn Header="Name" Width="150" DisplayMemberBinding="{Binding BoardGame.Name}" />
+                            <GridViewColumn Header="Position" Width="100" DisplayMemberBinding="{Binding Position}" />
+                            <GridViewColumn Header="Name" Width="250" DisplayMemberBinding="{Binding BoardGame.Name}" />
                         </GridView>
                     </ListView.View>
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
-                            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Edit" />
+                            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="EditFavourite" />
                             <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
                         </Style>
                     </ListView.ItemContainerStyle>

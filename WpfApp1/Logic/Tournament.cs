@@ -8,6 +8,7 @@ namespace WpfApp1.Logic
 {
     public static class Tournament
     {
+        private const int favouriteOffset = 15;
 
         public static void recalculateScores(int idTournament)
         {
@@ -50,6 +51,75 @@ namespace WpfApp1.Logic
                 db.SaveChanges();
             }
             db.Dispose();
+        }
+        public static void matchMaking(int idTournament,List<decimal> hours)
+        {
+            var db = new DDBB.DDBBContext();
+            var torneo = db.Tournaments.Find(idTournament);
+            var days = (torneo.StartDate - torneo.EndDate).Value.TotalDays +1 ;
+            
+            var durations = new List<decimal>();
+            var totalPlayers = torneo.TournamentPlayers.Count();
+            for(int i = 0; i < hours.Count(); i++)
+            {
+                durations.Add(hours[i + 1] - hours[i++]);
+            }
+            
+            var data = new List<MatchMakingPlayer>();
+
+            foreach (var player in torneo.TournamentPlayers)
+            {
+                data.Add(new MatchMakingPlayer() { games = new List<Game>(), player = player.PlayerId, totalGames = 0 });
+            }
+            List<int> chosenPlayers = new List<int>();
+            List<int> chosenBoardGames = new List<int>();
+            bool done = false;
+            decimal actualDuration = 0;
+            while (!done)
+            {
+                int player = choosePlayer(chosenPlayers, data);
+                var item = data.First(x => x.player == player);
+                var games = db.playerFavourites.Where(x => x.PlayerId == player && chosenBoardGames.Contains(x.BoardGameId)).OrderBy(x=>x.Position);
+                bool tournamentGameFlag = false;
+                while (!tournamentGameFlag)
+                {
+                    foreach(var game in games)
+                    {
+                        var favourites = db.playerFavourites.Where(x => x.PlayerId != player && data.Select(y=>y.player).Contains(x.PlayerId) && !chosenBoardGames.Contains(x.BoardGameId)).GroupBy(x=>x.PlayerId);
+                        //var count = favourites.Where(x=>)
+                    }
+                }
+                //foreach(var player in torneo.TournamentPlayers)
+                //{
+                //    var item = data.First(x => x.player == player.PlayerId);
+
+                //    var games = player.Player.PlayerFavourites.Where(x=>!item.games.Select(y=>y.idBoardGame).Contains(x.BoardGameId)).OrderBy(x => x.Position);
+                //    bool tournamentGameFlag = false;                    
+                //    while (!tournamentGameFlag)
+                //    {
+                //        foreach(var game in games)
+                //        {
+
+                //            var favourites = db.playerFavourites.Where(x => x.PlayerId != player.PlayerId && torneo.TournamentPlayers.Select(y => y.PlayerId).Contains(x.PlayerId));
+                //        }
+                //    }
+                //}
+                done = true;
+            }
+        }
+        private static int choosePlayer(List<int> chosenPlayers,List<MatchMakingPlayer> players)
+        {
+            int player = 0;
+            var data = chosenPlayers.GroupBy(x => x).OrderBy(x=>x.Count());
+            if(data.Count() == players.Count())
+            {
+                player = data.First().Key;
+            }
+            else
+            {
+                player = players.First(x => !data.Select(y => y.Key).Contains(x.player)).player;
+            }
+            return player;
         }
         
     }

@@ -98,7 +98,7 @@ namespace WpfApp1.DDBB
 
                 //PLAYERFAVOURITES
                 tableCommand = "CREATE TABLE IF NOT " +
-                   "EXISTS PlayerFavourites (Id INTEGER PRIMARY KEY AUTOINCREMENT NOT null, " +
+                   "EXISTS PlayerFavourite (Id INTEGER PRIMARY KEY AUTOINCREMENT NOT null, " +
                    "PlayerId int not null, " +
                    "BoardGameId int not null, " +
                    "Position int not null, " +
