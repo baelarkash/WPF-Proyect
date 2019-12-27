@@ -55,6 +55,10 @@ namespace WpfApp1.Logic
         }
         public static void matchMaking(int idTournament, List<decimal> hours)
         {
+
+            ///TODO:    Guardar en BBDD
+            ///         Establecer emparejamientos simultaneos con distinta duracion
+            ///         Acabar bucle de forma "elegante"
             var db = new DDBB.DDBBContext();
             var torneo = db.Tournaments.Find(idTournament);
             var days = (torneo.StartDate - torneo.EndDate).Value.TotalDays + 1;
@@ -83,14 +87,16 @@ namespace WpfApp1.Logic
             decimal startHour = 0;
             int ActualDay = 0;
             int durationIndex = 0;
-            while (!done)
+            int error = 0;
+            int error2 = 0;
+            while (!done && error++<1000)
             {
                 playersAux.Clear();
                 playersAccumulated.Clear();
-
+                actualDuration = 0;
                 bool firstGame = true;
-                accumulattedDuration = 0;
-                while (playersAccumulated.Count() != data.Count())
+                error2 = 0;
+                while (playersAccumulated.Count() != data.Count() && error2++ < 100)
                 {
                     int player = choosePlayer(chosenPlayers, data, firstGame, playersAccumulated);
                     
@@ -128,14 +134,16 @@ namespace WpfApp1.Logic
                         accumulattedDuration = actualDuration;
                         firstGame = false;
                     }
+                    
                    
                 }
                 startHour += actualDuration;
                 if(startHour == durations[durationIndex])
                 {
+                    
                     if (++durationIndex == durations.Count())
                     {
-                        durationIndex = 0;
+                        durationIndex = 0;                        
                         ActualDay++;
                     }
                 }
@@ -143,7 +151,6 @@ namespace WpfApp1.Logic
                 {
                     done = true;
                 }
-
 
                 
             }
