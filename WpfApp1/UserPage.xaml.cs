@@ -29,7 +29,7 @@ namespace WpfApp1
             this.DataContext = new Player();
             var items = db.Players.ToList();
 			Table.ItemsSource = items;
-            cmbBoardGames.ItemsSource = db.BoardGames.ToList();
+            cmbBoardGames.ItemsSource = db.BoardGames.OrderBy(x => x.Name).ToList();
         }
         public UsersPage(int id)
         {
@@ -37,7 +37,7 @@ namespace WpfApp1
             this.DataContext = db.Players.Find(id);
             var items = db.Players.ToList();
             Table.ItemsSource = items;
-            cmbBoardGames.ItemsSource = db.BoardGames.ToList();
+            cmbBoardGames.ItemsSource = db.BoardGames.OrderBy(x=>x.Name).ToList();
         }
         private void Edit(object sender, MouseButtonEventArgs e)
         {
@@ -88,7 +88,7 @@ namespace WpfApp1
         }
         private void DeleteButton(object sender, RoutedEventArgs e)
         {
-            var item = (Player)Table.DataContext;
+            var item = (Player)Table.DataContext;            
             db.Players.Remove(item);
             db.SaveChanges();
             RefreshTable();
@@ -114,10 +114,15 @@ namespace WpfApp1
             var item = (PlayerFavourite)PlayerFavourite.DataContext;
             item.BoardGameId = ((BoardGame)cmbBoardGames.SelectedItem).Id;
             var favourites = db.playerFavourites.Where(x => x.PlayerId == ((Player)this.DataContext).Id);
+            if (item.Position == null)
+            {
+                item.Position = favourites.Count()+1;
+            }
             if (item.Id == 0)
             {                
                 if (!favourites.Select(x => x.BoardGameId).Contains(item.BoardGameId))
-                {                                       
+                {          
+                    
                     db.playerFavourites.Add(item);
                 }                    
             }
@@ -125,7 +130,7 @@ namespace WpfApp1
             var done = false;
             while (!done)
             {
-                var aux = favourites.FirstOrDefault(x => x.Position == position);
+                var aux = favourites.FirstOrDefault(x => x.Position == position && item.Id != x.Id);
                 if (aux != null)
                 {
                     aux.Position++;
@@ -152,7 +157,14 @@ namespace WpfApp1
         private void DeleteFavouriteButton(object sender,RoutedEventArgs e)
         {
             var playerFavourite = (PlayerFavourite)Table2.SelectedItem;
+            
+            foreach(var item in db.playerFavourites.Where(x => x.PlayerId == playerFavourite.PlayerId && x.Position > playerFavourite.Position))
+            {
+                item.Position--;
+            }
+
             db.playerFavourites.Remove(playerFavourite);
+
             db.SaveChanges();
             var idPlayer = ((Player)this.DataContext).Id;
             RefreshTableFavourite(idPlayer);

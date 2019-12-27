@@ -172,6 +172,7 @@
                             <GridViewColumn Header="Juego" Width="150" DisplayMemberBinding="{Binding BoardGame.Name}"></GridViewColumn>
                             <GridViewColumn Header="Torneo" Width="150" DisplayMemberBinding="{Binding Tournament.Name}"></GridViewColumn>
                             <GridViewColumn Header="Ganador" Width="150" DisplayMemberBinding="{Binding WinnerName}" />
+                            <GridViewColumn Header="Players" Width="150" DisplayMemberBinding="{Binding Players}" />
                         </GridView>
                     </ListView.View>
                     <ListView.ItemContainerStyle>

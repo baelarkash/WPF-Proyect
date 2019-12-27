@@ -15,6 +15,7 @@ namespace WpfApp1.ViewModels
         public int BoardGameId { get; set; }
         public bool Finished { get; set; }
         public string WinnerName { get; set; }
+        public string Players { get; set; }
 
         public DDBB.Models.Tournament Tournament { get; set; }
         public DDBB.Models.BoardGame BoardGame { get; set; }

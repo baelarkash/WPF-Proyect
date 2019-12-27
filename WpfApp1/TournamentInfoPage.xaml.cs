@@ -108,7 +108,7 @@ namespace WpfApp1
                 cmbPlayers.ItemsSource = db.TournamentPlayers.Where(x=>x.TournamentId == TournamentGame.TournamentId).Select(x=>x.Player).ToList();
                 if(dataItem.TournamentGamePlayers!= null)
                 {
-                    lstPlayers.ItemsSource = dataItem.TournamentGamePlayers.ToList();
+                    lstPlayers.ItemsSource = dataItem.TournamentGamePlayers.OrderByDescending(x=>x.Score).ToList();
                 }
                 else
                 {
@@ -241,12 +241,13 @@ namespace WpfApp1
 
             IMapper iMapper = config.CreateMapper();
 
-            var items = db.TournamentGames.Where(x => x.TournamentId == idTournament).ToList();
+            var items = db.TournamentGames.Where(x => x.TournamentId == idTournament).OrderBy(x=>x.StartTime).ToList();
             var model = new List<ViewModels.TournamentGameTable>();
             foreach(var item in items)
             {
                 var aux = iMapper.Map<TournamentGame, ViewModels.TournamentGameTable>(item);
                 aux.WinnerName = getWinner(item);
+                aux.Players = getPlayers(item);
                 model.Add(aux);
             }                        
             Table.ItemsSource = model;
@@ -268,7 +269,7 @@ namespace WpfApp1
         {
             cmbPlayers.SelectedItem = null;
             GamePlayers.DataContext = new TournamentGamePlayer() { TournamentGameId = idTournamentGame };
-            lstPlayers.ItemsSource = db.TournamentGamePlayers.Where(x => x.TournamentGameId == idTournamentGame).ToList();
+            lstPlayers.ItemsSource = db.TournamentGamePlayers.Where(x => x.TournamentGameId == idTournamentGame).OrderByDescending(x => x.Score).ToList();
         }
         private void New(object sender, RoutedEventArgs e)
         {
@@ -281,6 +282,12 @@ namespace WpfApp1
             //var playerId = tg.TournamentGamePlayers?.Count > 0 ? tg.TournamentGamePlayers.OrderByDescending(x => x.Score).First().PlayerId:0;
             //return playerId == 0?"":db.Players.Find(playerId).Name;
             return tg.TournamentGamePlayers?.Count > 0 ? tg.TournamentGamePlayers.OrderByDescending(x => x.Score).First().Player.Name : "";
+        }
+        private string getPlayers(TournamentGame tg)
+        {
+            //var playerId = tg.TournamentGamePlayers?.Count > 0 ? tg.TournamentGamePlayers.OrderByDescending(x => x.Score).First().PlayerId:0;
+            //return playerId == 0?"":db.Players.Find(playerId).Name;
+            return tg.TournamentGamePlayers?.Count > 0 ? string.Join(",",tg.TournamentGamePlayers.OrderByDescending(x => x.Score).Select(x=>x.Player.Name)) : "";
         }
         #endregion
     }
