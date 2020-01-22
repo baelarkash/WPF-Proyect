@@ -104,7 +104,7 @@ namespace WpfApp1
             Tournament item = (Tournament)this.DataContext;
             if(item.Id != 0 && times.Count()%2 == 0 && times.Count()>0)
             {                
-                Logic.Tournament.matchMaking(item.Id, times.Select(x=> decimal.Parse(x.Item2)).ToList());
+                Logic.Tournament.matchMaking(item.Id, times.Select(x=> decimal.Parse(x.Item2.Replace('.',','))).ToList());
             }
             
         }

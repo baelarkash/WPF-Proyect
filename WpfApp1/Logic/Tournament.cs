@@ -91,7 +91,7 @@ namespace WpfApp1.Logic
             int durationIndex = 0;
             int error = 0;
             int error2 = 0;
-            while (!done && error++<1000)
+            while (!done && error++<50)
             {
                 playersAux.Clear();
                 playersAccumulated.Clear();
@@ -111,7 +111,8 @@ namespace WpfApp1.Logic
                     }
                     if (games.Count() == 0 && repeatGame)
                     {
-                        games = db.playerFavourites.Where(x => x.PlayerId == player && x.BoardGame.Duration <= maxDuration);
+                        var playerGames = data.FirstOrDefault(x => x.player == player).games.Select(x => x.idBoardGame);
+                        games = db.playerFavourites.Where(x => x.PlayerId == player && x.BoardGame.Duration <= maxDuration && !playerGames.Contains(x.BoardGameId));
                         if (accumulattedDuration != 0)
                         {
                             games = games.Where(x => x.BoardGame.Duration == accumulattedDuration);
@@ -119,7 +120,13 @@ namespace WpfApp1.Logic
                     }
                     foreach (var game in games.OrderBy(x => x.Position))
                     {
-                        var players = db.playerFavourites.Where(x => x.PlayerId != player && tournamentPlayers.Contains(x.PlayerId) && !playersAccumulated.Contains(x.PlayerId) && x.BoardGameId == game.BoardGameId).OrderBy(x => x.Position).ToList();
+                        var players = db.playerFavourites.Where(x => 
+                                x.PlayerId != player 
+                            &&  tournamentPlayers.Contains(x.PlayerId) 
+                            &&  !playersAccumulated.Contains(x.PlayerId) 
+                            &&  x.BoardGameId == game.BoardGameId                            
+                        ).OrderBy(x => x.Position).Select(x=>x.PlayerId).ToList();
+                        players = players.Where(x => !data.FirstOrDefault(y => y.player == x).games.Select(y => y.idBoardGame).Contains(game.BoardGameId)).ToList();
                         
                         if (players.Count() + 1 >= game.BoardGame.MinPlayers)
                         {
@@ -127,7 +134,7 @@ namespace WpfApp1.Logic
                             playersAux.Add(player);                            
                             while (players.Count() >= j && j < game.BoardGame.MaxPlayers && !(game.BoardGame.MaxPlayers - j < 2 && data.Count() - playersAux.Count() - playersAccumulated.Count() == 2))
                             {
-                                playersAux.Add(players.ElementAt(j++ - 1).PlayerId);
+                                playersAux.Add(players.ElementAt(j++ - 1));
                             }
                             List<DDBB.Models.TournamentGamePlayer> list = new List<DDBB.Models.TournamentGamePlayer>();
                             foreach (var aux in data.Where(x => playersAux.Contains(x.player)))
@@ -167,11 +174,12 @@ namespace WpfApp1.Logic
                 startHour += actualDuration;
                 if(startHour == durations[durationIndex])
                 {
-                    
+                    error = 0;
+                    startHour = 0;
                     if (++durationIndex == durations.Count())
                     {
                         durationIndex = 0;                        
-                        ActualDay++;
+                        ActualDay++;                        
                     }
                 }
                 if(ActualDay == days)

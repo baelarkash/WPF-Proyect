@@ -53,7 +53,8 @@ namespace WpfApp1
         }
 		public void Help(object sender,RoutedEventArgs e)
         {
-            Process.Start("https://trello.com/b/S2p00SgZ/boardgameapp");
+            Process.Start("https://google.es");
+            //Process.Start("https://trello.com/b/S2p00SgZ/boardgameapp");
         }
 	}
 }
