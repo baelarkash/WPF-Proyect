@@ -96,23 +96,26 @@ namespace WpfApp1
             if (item != null)
             {
                 var TournamentGame = item.DataContext as ViewModels.TournamentGameTable;
-                var dataItem = db.TournamentGames.Find(TournamentGame.Id);
-                this.DataContext = dataItem;
-                cmbBoardGames.SelectedValue = dataItem.BoardGame;
-                cmbTournaments.SelectedValue = dataItem.Tournament;
-                GamePlayers.Visibility = Visibility.Visible;
-                var tournamentGamePlayer = new TournamentGamePlayer();
-                tournamentGamePlayer.TournamentGameId = TournamentGame.Id;
-                GamePlayers.DataContext = tournamentGamePlayer;
-                cmbPlayers.SelectedItem = null;
-                cmbPlayers.ItemsSource = db.TournamentPlayers.Where(x=>x.TournamentId == TournamentGame.TournamentId).Select(x=>x.Player).ToList();
-                if(dataItem.TournamentGamePlayers!= null)
+                if (TournamentGame != null)
                 {
-                    lstPlayers.ItemsSource = dataItem.TournamentGamePlayers.OrderByDescending(x=>x.Score).ToList();
-                }
-                else
-                {
-                    lstPlayers.ItemsSource = null;
+                    var dataItem = db.TournamentGames.Find(TournamentGame.Id);
+                    this.DataContext = dataItem;
+                    cmbBoardGames.SelectedValue = dataItem.BoardGame;
+                    cmbTournaments.SelectedValue = dataItem.Tournament;
+                    GamePlayers.Visibility = Visibility.Visible;
+                    var tournamentGamePlayer = new TournamentGamePlayer();
+                    tournamentGamePlayer.TournamentGameId = TournamentGame.Id;
+                    GamePlayers.DataContext = tournamentGamePlayer;
+                    cmbPlayers.SelectedItem = null;
+                    cmbPlayers.ItemsSource = db.TournamentPlayers.Where(x => x.TournamentId == TournamentGame.TournamentId).Select(x => x.Player).ToList();
+                    if (dataItem.TournamentGamePlayers != null)
+                    {
+                        lstPlayers.ItemsSource = dataItem.TournamentGamePlayers.OrderByDescending(x => x.Score).ToList();
+                    }
+                    else
+                    {
+                        lstPlayers.ItemsSource = null;
+                    }
                 }
                 
             }
@@ -152,11 +155,14 @@ namespace WpfApp1
         {
 
             var TournamentGamePlayer = lstPlayers.SelectedItem as TournamentGamePlayer;
-            GamePlayers.DataContext = TournamentGamePlayer;
-            var game = db.TournamentGamePlayers.Find(TournamentGamePlayer.Id);
-            cmbPlayers.SelectedValue = game.Player;
-            Score.Text = game.Score.HasValue ? game.Score.Value.ToString() : "";
+            if(TournamentGamePlayer != null)
+            {
+                GamePlayers.DataContext = TournamentGamePlayer;
 
+                var game = db.TournamentGamePlayers.Find(TournamentGamePlayer.Id);
+                cmbPlayers.SelectedValue = game.Player;
+                Score.Text = game.Score.HasValue ? game.Score.Value.ToString() : "";
+            }           
         }
         private void DeletePlayer(object sender, RoutedEventArgs e)
         {

@@ -55,12 +55,14 @@ namespace WpfApp1.Logic
         }
         public static void matchMaking(int idTournament, List<decimal> hours)
         {
+            ///Parameters
+            bool repeatGame = true;
 
             ///TODO:    Guardar en BBDD
             ///         Establecer emparejamientos simultaneos con distinta duracion
             ///         Acabar bucle de forma "elegante"
             var db = new DDBB.DDBBContext();
-            var torneo = db.Tournaments.Find(idTournament);
+            var torneo = db.Tournaments.Find(idTournament);            
             var days = (torneo.StartDate - torneo.EndDate).Value.TotalDays + 1;
 
             var durations = new List<decimal>();
@@ -95,15 +97,25 @@ namespace WpfApp1.Logic
                 playersAccumulated.Clear();
                 actualDuration = 0;
                 bool firstGame = true;
+                accumulattedDuration = 0;
                 error2 = 0;
-                while (playersAccumulated.Count() != data.Count() && error2++ < 100)
+                while (playersAccumulated.Count() != data.Count() && error2++ < 10)
                 {
                     int player = choosePlayer(chosenPlayers, data, firstGame, playersAccumulated);
+                    var maxDuration = durations[durationIndex] - startHour;
+                    var games = db.playerFavourites.Where(x => x.PlayerId == player && !chosenBoardGames.Contains(x.BoardGameId) && x.BoardGame.Duration <= maxDuration);
                     
-                    var games = db.playerFavourites.Where(x => x.PlayerId == player && !chosenBoardGames.Contains(x.BoardGameId)&& x.BoardGame.Duration<=durations[durationIndex] - startHour);
                     if (accumulattedDuration != 0)
                     {
                         games = games.Where(x => x.BoardGame.Duration == accumulattedDuration);
+                    }
+                    if (games.Count() == 0 && repeatGame)
+                    {
+                        games = db.playerFavourites.Where(x => x.PlayerId == player && x.BoardGame.Duration <= maxDuration);
+                        if (accumulattedDuration != 0)
+                        {
+                            games = games.Where(x => x.BoardGame.Duration == accumulattedDuration);
+                        }
                     }
                     foreach (var game in games.OrderBy(x => x.Position))
                     {
@@ -117,12 +129,27 @@ namespace WpfApp1.Logic
                             {
                                 playersAux.Add(players.ElementAt(j++ - 1).PlayerId);
                             }
+                            List<DDBB.Models.TournamentGamePlayer> list = new List<DDBB.Models.TournamentGamePlayer>();
                             foreach (var aux in data.Where(x => playersAux.Contains(x.player)))
                             {
                                 aux.games.Add(new Game(game.BoardGameId, startHour, startHour + game.BoardGame.Duration.Value, game.BoardGame.Duration.Value, ActualDay));
                                 aux.totalGames++;
+                                list.Add(new DDBB.Models.TournamentGamePlayer() { PlayerId = aux.player });
                             }
+                            
+                            
+                            db.TournamentGames.Add(new DDBB.Models.TournamentGame()
+                            {
+                                BoardGameId = game.BoardGameId,
+                                TournamentId = torneo.Id,
+                                CreationDate = DateTime.Now,
+                                Finished = false,
+                                StartTime = torneo.StartDate.Value.AddDays(ActualDay).AddMinutes((Decimal.ToDouble(hours[durationIndex*2])+ Decimal.ToDouble(startHour))*60),                                
+                                TournamentGamePlayers = list
+                            });
+                            db.SaveChanges();
                             if (firstGame) actualDuration += game.BoardGame.Duration.Value;
+                            chosenBoardGames.Add(game.BoardGameId);
                             playersAccumulated.AddRange(playersAux);
                             playersAux.Clear();
                             break;
@@ -151,8 +178,6 @@ namespace WpfApp1.Logic
                 {
                     done = true;
                 }
-
-                
             }
         }
         private static int choosePlayer(List<int> chosenPlayers, List<MatchMakingPlayer> players, bool firstPlayer, List<int> playerList)
@@ -161,13 +186,21 @@ namespace WpfApp1.Logic
             var data = chosenPlayers.GroupBy(x => x).OrderBy(x => x.Count());
             if (data.Count() == players.Count())
             {
-                player = data.First(x=> playerList.Contains(x.Key)).Key;
+                player = data.First(x=> !playerList.Contains(x.Key)).Key;
             }
             else
             {
                 if(data != null && data.Count() > 0)
                 {
-                    player = players.First(x => !data.Select(y => y.Key).Contains(x.player) && !playerList.Contains(x.player)).player;
+                    var aux = players.FirstOrDefault(x => !data.Select(y => y.Key).Contains(x.player) && !playerList.Contains(x.player));
+                    if(aux!= null)
+                    {
+                        player = aux.player;
+                    }
+                    else
+                    {
+                        player = data.First(x => !playerList.Contains(x.Key)).Key;
+                    }                    
                 }
                 else
                 {

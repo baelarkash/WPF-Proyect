@@ -51,6 +51,9 @@ namespace WpfApp1
             NavigationService nav = NavigationService.GetNavigationService(this);
             nav.Navigate(new Uri(uri, UriKind.RelativeOrAbsolute));
         }
-		
+		public void Help(object sender,RoutedEventArgs e)
+        {
+            Process.Start("https://trello.com/b/S2p00SgZ/boardgameapp");
+        }
 	}
 }

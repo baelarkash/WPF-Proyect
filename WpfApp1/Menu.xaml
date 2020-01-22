@@ -11,12 +11,14 @@
         <MenuItem Header="Jugadores" Click="UserPage"></MenuItem>
         <MenuItem Header="Torneos" Click="TournamentPage"></MenuItem>
         <MenuItem Header="Juegos" Click="BoardGamePage"></MenuItem>
+        <MenuItem Header="Ayuda" Click="Help"></MenuItem>
         <MenuItem Header="Example">
             <MenuItem Header="_New"/>
             <MenuItem Header="_Delete"/>
             <MenuItem Header="_Save" />
             <Separator />
             <MenuItem Header="_Exit" />
+            
         </MenuItem>
 		
     </Menu>

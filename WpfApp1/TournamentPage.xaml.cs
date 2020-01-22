@@ -22,6 +22,7 @@ namespace WpfApp1
     public partial class TournamentPage : Page
     {
         DDBB.DDBBContext db = new DDBB.DDBBContext();
+        List<Tuple<string, string>> times = new List<Tuple<string, string>>();
         public TournamentPage()
 		{
 			InitializeComponent();
@@ -101,12 +102,9 @@ namespace WpfApp1
         {
 
             Tournament item = (Tournament)this.DataContext;
-            if(item.Id != 0)
-            {
-                List<decimal> hours = new List<decimal>();
-                hours.Add(10);
-                hours.Add(15);
-                Logic.Tournament.matchMaking(item.Id, hours);
+            if(item.Id != 0 && times.Count()%2 == 0 && times.Count()>0)
+            {                
+                Logic.Tournament.matchMaking(item.Id, times.Select(x=> decimal.Parse(x.Item2)).ToList());
             }
             
         }
@@ -172,6 +170,39 @@ namespace WpfApp1
             cmbPlayers.SelectedItem = null;
             TournamentPlayers.DataContext = new TournamentPlayer() { TournamentId = idTournamentGame };
             lstPlayers.ItemsSource = db.TournamentPlayers.Where(x => x.TournamentId == idTournamentGame).ToList();
+        }
+        #endregion
+        #region "MatchMaking"
+        private void CreateOrUpdateHour(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(TimeId.Text))
+                {
+                    var aux = times.FirstOrDefault(x => x.Item1 == TimeId.Text);
+                    times.Remove(aux);
+                }
+                times.Add(new Tuple<string, string>(times.Max(x => x.Item1) + 1, Hora.Text));
+                TimeId.Text = "";
+                Hora.Text = "";
+                lstHoras.ItemsSource = null;
+                lstHoras.ItemsSource = times;
+            }
+            catch (Exception ex) { }
+        }
+        private void DeleteHour(object sender, RoutedEventArgs e)
+        {
+            var time = lstHoras.SelectedItem as Tuple<string, string>;
+            var aux = times.FirstOrDefault(x => x.Item1 == time.Item1);
+            times.Remove(aux);
+            lstHoras.ItemsSource = null;
+            lstHoras.ItemsSource = times;
+        }
+        private void EditHour(object sender, RoutedEventArgs e)
+        {
+            var time = lstHoras.SelectedItem as Tuple<string,string>;
+            TimeId.Text = time.Item1;
+            Hora.Text = time.Item2;
         }
         #endregion
     }

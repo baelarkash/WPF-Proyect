@@ -73,6 +73,35 @@
                     </StackPanel>
 
                 </Grid>
+                <TextBlock HorizontalAlignment="Center" FontSize="25">Listado de partidas</TextBlock>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                    <Button Click="AddButton" Width="20" HorizontalAlignment="Right">
+                        <Image Source="Content/Images/add.png"/>
+                    </Button>
+                    <Button Click="DeleteButton" Width="20" HorizontalAlignment="Right">
+                        <Image Source="Content/Images/delete.png"/>
+                    </Button>
+                </StackPanel>
+                <ListView Margin="10" Name="Table">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Id" Width="30" DisplayMemberBinding="{Binding Id}" />
+                            <GridViewColumn Header="Creacion" Width="150" DisplayMemberBinding="{Binding CreationDate}" />
+                            <GridViewColumn Header="Fecha inicio" Width="150" DisplayMemberBinding="{Binding StartTime,StringFormat=dd/MM/yyyy}" />
+                            <GridViewColumn Header="Hora inicio" Width="150" DisplayMemberBinding="{Binding StartTime,StringFormat=HH:mm}" />
+                            <GridViewColumn Header="Juego" Width="300" DisplayMemberBinding="{Binding BoardGame.Name}"></GridViewColumn>
+                            <GridViewColumn Header="Torneo" Width="150" DisplayMemberBinding="{Binding Tournament.Name}"></GridViewColumn>
+                            <GridViewColumn Header="Ganador" Width="150" DisplayMemberBinding="{Binding WinnerName}" />
+                            <GridViewColumn Header="Players" Width="150" DisplayMemberBinding="{Binding Players}" />
+                        </GridView>
+                    </ListView.View>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Edit" />
+                            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                </ListView>
                 <Grid Margin="20" x:Name="GamePlayers" Visibility="Hidden">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -136,6 +165,8 @@
                     </StackPanel>
 
                 </Grid>
+                
+                
                 <TextBlock HorizontalAlignment="Center" FontSize="25">Puntuaciones</TextBlock>
                 <ListView Margin="10" Name="Table2">
                     <ListView.View>
@@ -146,43 +177,7 @@
                             <GridViewColumn Header="Juegos ganados" Width="150" DisplayMemberBinding="{Binding GamesWon}" />
                         </GridView>
                     </ListView.View>
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Edit" />
-                            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-                        </Style>
-                    </ListView.ItemContainerStyle>
                 </ListView>
-                <TextBlock HorizontalAlignment="Center" FontSize="25">Listado de partidas</TextBlock>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
-                    <Button Click="AddButton" Width="20" HorizontalAlignment="Right">
-                        <Image Source="Content/Images/add.png"/>
-                    </Button>
-                    <Button Click="DeleteButton" Width="20" HorizontalAlignment="Right">
-                        <Image Source="Content/Images/delete.png"/>
-                    </Button>
-                </StackPanel>
-                <ListView Margin="10" Name="Table">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Id" Width="30" DisplayMemberBinding="{Binding Id}" />
-                            <GridViewColumn Header="Creacion" Width="150" DisplayMemberBinding="{Binding CreationDate}" />
-                            <GridViewColumn Header="Fecha inicio" Width="150" DisplayMemberBinding="{Binding StartTime,StringFormat=dd/MM/yyyy}" />
-                            <GridViewColumn Header="Hora inicio" Width="150" DisplayMemberBinding="{Binding StartTime,StringFormat=HH:mm}" />
-                            <GridViewColumn Header="Juego" Width="150" DisplayMemberBinding="{Binding BoardGame.Name}"></GridViewColumn>
-                            <GridViewColumn Header="Torneo" Width="150" DisplayMemberBinding="{Binding Tournament.Name}"></GridViewColumn>
-                            <GridViewColumn Header="Ganador" Width="150" DisplayMemberBinding="{Binding WinnerName}" />
-                            <GridViewColumn Header="Players" Width="150" DisplayMemberBinding="{Binding Players}" />
-                        </GridView>
-                    </ListView.View>
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <EventSetter Event="PreviewMouseLeftButtonDown" Handler="Edit" />
-                            <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                </ListView>
-
             </StackPanel>
 
         </ScrollViewer>
