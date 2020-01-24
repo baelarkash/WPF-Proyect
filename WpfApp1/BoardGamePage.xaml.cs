@@ -74,7 +74,7 @@ namespace WpfApp1
         }
         private void refreshTable()
         {
-            var items = db.BoardGames.ToList();
+            var items = db.BoardGames.OrderBy(x=>x.Name).ToList();
             Table.ItemsSource = items;
         }
 

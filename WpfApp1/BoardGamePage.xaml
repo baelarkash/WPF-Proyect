@@ -88,7 +88,7 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Header="Id" Width="30" DisplayMemberBinding="{Binding Id}" />
-                            <GridViewColumn Header="Nombre" Width="150" DisplayMemberBinding="{Binding Name}" />
+                            <GridViewColumn Header="Nombre" Width="300" DisplayMemberBinding="{Binding Name}" />
                             <GridViewColumn Header="Fecha creación" Width="150" DisplayMemberBinding="{Binding CreationDate}" />
                             <GridViewColumn Header="Mínimo Jugadores" Width="150" DisplayMemberBinding="{Binding MinPlayers}" />
                             <GridViewColumn Header="Mánimo Jugadores" Width="150" DisplayMemberBinding="{Binding MaxPlayers}" />

@@ -103,7 +103,10 @@ namespace WpfApp1.Logic
                 {
                     int player = choosePlayer(chosenPlayers, data, firstGame, playersAccumulated);
                     var maxDuration = durations[durationIndex] - startHour;
-                    var games = db.playerFavourites.Where(x => x.PlayerId == player && !chosenBoardGames.Contains(x.BoardGameId) && x.BoardGame.Duration <= maxDuration);
+                    var games = db.playerFavourites.Where(x => 
+                            x.PlayerId == player 
+                        &&  !chosenBoardGames.Contains(x.BoardGameId) 
+                        &&  x.BoardGame.Duration <= maxDuration);
                     
                     if (accumulattedDuration != 0)
                     {
@@ -112,7 +115,11 @@ namespace WpfApp1.Logic
                     if (games.Count() == 0 && repeatGame)
                     {
                         var playerGames = data.FirstOrDefault(x => x.player == player).games.Select(x => x.idBoardGame);
-                        games = db.playerFavourites.Where(x => x.PlayerId == player && x.BoardGame.Duration <= maxDuration && !playerGames.Contains(x.BoardGameId));
+                        games = db.playerFavourites.Where(x => 
+                                x.PlayerId == player 
+                            &&  x.BoardGame.Duration <= maxDuration 
+                            &&  !playerGames.Contains(x.BoardGameId));
+
                         if (accumulattedDuration != 0)
                         {
                             games = games.Where(x => x.BoardGame.Duration == accumulattedDuration);
@@ -126,6 +133,7 @@ namespace WpfApp1.Logic
                             &&  !playersAccumulated.Contains(x.PlayerId) 
                             &&  x.BoardGameId == game.BoardGameId                            
                         ).OrderBy(x => x.Position).Select(x=>x.PlayerId).ToList();
+
                         players = players.Where(x => !data.FirstOrDefault(y => y.player == x).games.Select(y => y.idBoardGame).Contains(game.BoardGameId)).ToList();
                         
                         if (players.Count() + 1 >= game.BoardGame.MinPlayers)

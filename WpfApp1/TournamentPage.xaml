@@ -139,7 +139,7 @@
                         <TextBlock HorizontalAlignment="Center" FontSize="25">MatchMaking</TextBlock>
                         <TextBox Name="TimeId" Text="" Visibility="Collapsed"></TextBox>
                         <Label>Hora</Label>
-                        <TextBox TabIndex="0" Name="Hora" Text=""></TextBox>
+                        <TextBox TabIndex="0" Name="Hora" Text="" PreviewTextInput="NumberValidationTextBox"></TextBox>
                         <Grid Margin="20">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"></ColumnDefinition>

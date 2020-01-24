@@ -295,6 +295,7 @@ namespace WpfApp1
             //return playerId == 0?"":db.Players.Find(playerId).Name;
             return tg.TournamentGamePlayers?.Count > 0 ? string.Join(",",tg.TournamentGamePlayers.OrderByDescending(x => x.Score).Select(x=>x.Player.Name)) : "";
         }
+
         #endregion
     }
 }

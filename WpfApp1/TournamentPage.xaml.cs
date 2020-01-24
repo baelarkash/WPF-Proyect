@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -203,6 +204,11 @@ namespace WpfApp1
             var time = lstHoras.SelectedItem as Tuple<string,string>;
             TimeId.Text = time.Item1;
             Hora.Text = time.Item2;
+        }
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("^(0[0-9]?|1[0-9]?|2[0-3]?)([,\\.][05]?)?$");
+            e.Handled = !regex.IsMatch(Hora.Text + e.Text);
         }
         #endregion
     }
