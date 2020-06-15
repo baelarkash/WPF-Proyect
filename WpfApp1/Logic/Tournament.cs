@@ -53,16 +53,33 @@ namespace WpfApp1.Logic
             }
             db.Dispose();
         }
-        public static void matchMaking(int idTournament, List<decimal> hours)
+        public static void matchMaking(int idTournament, List<decimal> hours,bool borrarDatosPrevios = true,bool repeatGame = true)
         {
             ///Parameters
-            bool repeatGame = true;
+            ///
 
-            ///TODO:    Guardar en BBDD
+
+
+
+            ///TODO:   
             ///         Establecer emparejamientos simultaneos con distinta duracion
             ///         Acabar bucle de forma "elegante"
             var db = new DDBB.DDBBContext();
-            var torneo = db.Tournaments.Find(idTournament);            
+            var torneo = db.Tournaments.Find(idTournament);
+
+
+            //Borrar datos de ejecuciones previas
+            if (borrarDatosPrevios)
+            {
+                //foreach (var game in torneo.TournamentGames.Where(x=>!x.Finished))
+                //{
+                //    db.TournamentGamePlayers.RemoveRange(game.TournamentGamePlayers);
+                    
+                    
+                //}
+                db.TournamentGames.RemoveRange(torneo.TournamentGames);
+                db.SaveChanges();
+            }
             var days = (torneo.StartDate - torneo.EndDate).Value.TotalDays + 1;
 
             var durations = new List<decimal>();

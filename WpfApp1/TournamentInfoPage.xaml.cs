@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfApp1.DDBB.Models;
+using WpfApp1.ViewModels;
 
 namespace WpfApp1
 {
@@ -248,15 +249,17 @@ namespace WpfApp1
             IMapper iMapper = config.CreateMapper();
 
             var items = db.TournamentGames.Where(x => x.TournamentId == idTournament).OrderBy(x=>x.StartTime).ToList();
-            var model = new List<ViewModels.TournamentGameTable>();
+            var model = new List<TournamentGameTable>();
             foreach(var item in items)
             {
-                var aux = iMapper.Map<TournamentGame, ViewModels.TournamentGameTable>(item);
+                var aux = iMapper.Map<TournamentGame, TournamentGameTable>(item);
                 aux.WinnerName = getWinner(item);
                 aux.Players = getPlayers(item);
                 model.Add(aux);
             }                        
             Table.ItemsSource = model;
+            CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(Table.ItemsSource);
+            view.Filter = TableFilter;
             LoadTablePuntuations(idTournament);
         }
         private void LoadTablePuntuations(int idTournament)
@@ -295,7 +298,21 @@ namespace WpfApp1
             //return playerId == 0?"":db.Players.Find(playerId).Name;
             return tg.TournamentGamePlayers?.Count > 0 ? string.Join(",",tg.TournamentGamePlayers.OrderByDescending(x => x.Score).Select(x=>x.Player.Name)) : "";
         }
-
+        private bool TableFilter(object item)
+        {
+            if (String.IsNullOrEmpty(txtFilter.Text))
+                return true;
+            else
+            {
+                var aux = item as TournamentGameTable;
+                return (aux.Players.IndexOf(txtFilter.Text, StringComparison.OrdinalIgnoreCase) >= 0 || aux.BoardGame.Name.IndexOf(txtFilter.Text, StringComparison.OrdinalIgnoreCase) >= 0);
+            }
+                
+        }
+        private void txtFilter_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        {
+            CollectionViewSource.GetDefaultView(Table.ItemsSource).Refresh();
+        }
         #endregion
     }
 }

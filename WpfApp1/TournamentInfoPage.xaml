@@ -75,6 +75,7 @@
                 </Grid>
                 <TextBlock HorizontalAlignment="Center" FontSize="25">Listado de partidas</TextBlock>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                    <TextBox Width="150" Name="txtFilter" TextChanged="txtFilter_TextChanged" />
                     <Button Click="AddButton" Width="20" HorizontalAlignment="Right">
                         <Image Source="Content/Images/add.png"/>
                     </Button>

@@ -53,7 +53,7 @@ namespace WpfApp1
                 item.OwnerId = ((Player)cmbPlayers.SelectedItem).Id;
                 db.SaveChanges();
             }catch(Exception ex) { }
-            var items = db.BoardGames.ToList();
+            var items = db.BoardGames.OrderBy(x=>x.Name).ToList();
             Table.ItemsSource = items;
             this.DataContext = new BoardGame();
         }
